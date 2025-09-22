@@ -31,5 +31,7 @@
 #define rl_attr_destructor
 #endif
 
+#define rl_alignas_cache_line alignas(64)
+
 #endif // RLMALLOC_INTERNAL_H
 
