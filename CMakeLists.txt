@@ -9,7 +9,7 @@ set(RLMALLOC_VERSION 1.0.0)
 
 set(CMAKE_BUILD_TYPE "Debug")
 
-add_compile_options(-Wall -Wextra -Werror)
+add_compile_options(-Wall -Wextra -Werror -ffreestanding)
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_definitions(RL_DEBUG)
 endif()
