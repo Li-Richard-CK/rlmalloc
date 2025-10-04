@@ -32,7 +32,7 @@ static rl_partition_t _rl_global_part = _rl_part_empty;
 
 extern bool _rl_new_page(rl_page_t *page);
 
-void _rl_main_heap_init(void) {
+void _rl_main_part_init(void) {
     _rl_global_part.id = 0; // global partiton id must be 0
     _rl_global_part.thread_id = rl_get_thread_id();
     _rl_global_part.size = RL_ONE_MiB * 8;
