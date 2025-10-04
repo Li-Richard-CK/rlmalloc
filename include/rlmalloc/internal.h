@@ -3,6 +3,8 @@
 #define RLMALLOC_INTERNAL_H
 
 #if defined __GNUC__ || defined __clang__
+#define rl_attr_alignas(alignment) __attribute__((aligned(alignment)))
+#define rl_attr_cache_line_alignment rl_attr_alignas(64)
 #define rl_attr_always_inline __attribute__((always_inline))
 #define rl_attr_const __attribute__((const))
 #define rl_attr_pure __attribute__((pure))
@@ -16,7 +18,13 @@
 #define rl_attr_constructor __attribute__((constructor))
 #define rl_attr_destructor __attribute__((destructor))
 
+#define rl_decl_thread __thread
+
 #else
+#warning "rlmalloc may not work without gnu-c/clang compiler"
+
+#define rl_attr_alignas(alignment)
+#define rl_attr_cache_lien_alignment
 #define rl_attr_always_inline
 #define rl_attr_const
 #define rl_attr_pure
@@ -29,9 +37,12 @@
 #define rl_attr_internal
 #define rl_attr_constructor
 #define rl_attr_destructor
+
+#define rl_decl_thread
 #endif
 
-#define rl_alignas_cache_line alignas(64)
+#define RL_ONE_KiB (1ULL << 10)
+#define RL_ONE_MiB (1ULL << 20)
 
 #endif // RLMALLOC_INTERNAL_H
 

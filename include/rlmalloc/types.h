@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdalign.h>
+#include <assert.h>
 
 #include "internal.h"
 
@@ -22,7 +23,7 @@ typedef struct rl_block_s {
 } rl_block_t;
 
 // a page
-typedef struct rl_alignas_cache_line rl_page_s {
+typedef struct rl_attr_cache_line_alignment rl_page_s {
     uint32_t id; // partition id + index inside partition
 
     size_t size;
@@ -35,8 +36,8 @@ typedef struct rl_alignas_cache_line rl_page_s {
             + sizeof(rl_block_t *) + sizeof(uintptr_t)) % 64];
 } rl_page_t;
 
-// a partition
-typedef struct rl_alignas_cache_line rl_partition_s {
+// a partition (aka the heap?)
+typedef struct rl_attr_cache_line_alignment rl_partition_s {
     uint32_t id; // index of partition
     thread_id_t thread_id;
     char desc[64]; // stores the description of the partition
