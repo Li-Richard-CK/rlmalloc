@@ -15,7 +15,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 set(rl_sources
-    src/.c)
+    src/error.c)
 
 add_library(rlmalloc SHARED ${rl_sources})
 set_target_properties(rlmalloc PROPERTIES
