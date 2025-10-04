@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <stdalign.h>
 #include <assert.h>
+#include <stdbool.h>
 
 #include "internal.h"
 
@@ -40,6 +41,9 @@ typedef struct rl_attr_cache_line_alignment rl_page_s {
 typedef struct rl_attr_cache_line_alignment rl_partition_s {
     uint32_t id; // index of partition
     rl_thread_id_t thread_id;
+
+    bool flag; // for checking whether this partition is initiated
+    bool is_full;
 
     size_t size;
     rl_page_t *pages;
