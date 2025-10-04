@@ -9,7 +9,7 @@
 #include "internal.h"
 
 // stores thread id
-typedef uint64_t thread_id_t;
+typedef uint64_t rl_thread_id_t;
 
 // one data
 typedef struct rl_data_s {
@@ -39,7 +39,7 @@ typedef struct rl_attr_cache_line_alignment rl_page_s {
 // a partition (aka the heap?)
 typedef struct rl_attr_cache_line_alignment rl_partition_s {
     uint32_t id; // index of partition
-    thread_id_t thread_id;
+    rl_thread_id_t thread_id;
     char desc[64]; // stores the description of the partition
 
     size_t size;
@@ -48,7 +48,7 @@ typedef struct rl_attr_cache_line_alignment rl_partition_s {
 
     // padding
     char _padding[
-        64 - (sizeof(uint32_t) + sizeof(thread_id_t)
+        64 - (sizeof(uint32_t) + sizeof(rl_thread_id_t)
                 + 64 + sizeof(size_t) +
                 sizeof(rl_page_t) + sizeof(uintptr_t)) % 64];
 } rl_partition_t;
