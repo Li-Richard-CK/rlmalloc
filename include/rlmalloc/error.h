@@ -1,0 +1,7 @@
+#ifndef RLMALLOC_ERROR_H
+#define RLMALLOC_ERROR_H
+
+
+
+#endif // RLMALLOC_ERROR_H
+
