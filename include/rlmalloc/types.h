@@ -40,7 +40,6 @@ typedef struct rl_attr_cache_line_alignment rl_page_s {
 typedef struct rl_attr_cache_line_alignment rl_partition_s {
     uint32_t id; // index of partition
     rl_thread_id_t thread_id;
-    char desc[64]; // stores the description of the partition
 
     size_t size;
     rl_page_t *pages;
@@ -49,8 +48,7 @@ typedef struct rl_attr_cache_line_alignment rl_partition_s {
     // padding
     char _padding[
         64 - (sizeof(uint32_t) + sizeof(rl_thread_id_t)
-                + 64 + sizeof(size_t) +
-                sizeof(rl_page_t) + sizeof(uintptr_t)) % 64];
+                + sizeof(size_t) + sizeof(rl_page_t) + sizeof(uintptr_t)) % 64];
 } rl_partition_t;
 
 static_assert(alignof(rl_page_t) == 64, "rl_page_t is not aligned");

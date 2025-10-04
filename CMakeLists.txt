@@ -15,7 +15,11 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif()
 
 set(rl_sources
-    src/error.c)
+    src/error.c
+    src/alloc.c
+    src/init.c
+    src/partition.c
+    src/platform/thread.c)
 
 add_library(rlmalloc SHARED ${rl_sources})
 set_target_properties(rlmalloc PROPERTIES
