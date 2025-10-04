@@ -23,7 +23,7 @@ typedef struct rl_block_s {
 
 // a page
 typedef struct rl_alignas_cache_line rl_page_s {
-    uint32_t id;
+    uint32_t id; // partition id + index inside partition
 
     size_t size;
     rl_block_t *blocks;
@@ -37,7 +37,7 @@ typedef struct rl_alignas_cache_line rl_page_s {
 
 // a partition
 typedef struct rl_alignas_cache_line rl_partition_s {
-    uint32_t id;
+    uint32_t id; // index of partition
     thread_id_t thread_id;
     char desc[64]; // stores the description of the partition
 
