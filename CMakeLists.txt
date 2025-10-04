@@ -19,6 +19,7 @@ set(rl_sources
     src/alloc.c
     src/init.c
     src/partition.c
+    src/page.c
     src/platform/thread.c)
 
 add_library(rlmalloc SHARED ${rl_sources})
