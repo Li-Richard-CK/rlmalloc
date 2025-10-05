@@ -13,10 +13,10 @@
 typedef uint64_t rl_thread_id_t;
 
 // one data
-typedef struct rl_data_s {
+typedef struct rl_ptr_s {
     uintptr_t origin;
     size_t offset;
-} rl_data_t;
+} rl_ptr_t;
 
 // a memory block
 typedef struct rl_block_s {
@@ -28,8 +28,11 @@ typedef struct rl_attr_cache_line_alignment rl_page_s {
     uint32_t id; // partition id + index inside partition
 
     size_t size;
+    size_t size_class;
     rl_block_t *blocks;
     uintptr_t ptr_start;
+
+    struct rl_page_s *next_page;
 
     // padding
     char _padding[
@@ -47,7 +50,9 @@ typedef struct rl_attr_cache_line_alignment rl_partition_s {
 
     size_t size;
     rl_page_t *pages;
+    rl_page_t *last_page;
     uintptr_t ptr_start;
+    uintptr_t ptr_end;
 
     // padding
     char _padding[

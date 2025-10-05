@@ -15,13 +15,14 @@
 #include "rlmalloc/types.h"
 
 /* ----------------------------Function Prototyes--------------------------- */
-
+// default size is 4KiB, set size = 0 if want default
+bool rl_new_page(rl_partition_t *part, size_t size, size_t size_class);
 
 /* -----------------------------Inline functions---------------------------- */
 static inline void * rl_attr_always_inline rl_align(
         void *block,
         size_t alignment) {
-#if defined RL_DEBUG
+#if defined(RL_DEBUG)
     assert(block != NULL);
     assert((alignment & (alignment - 1)) == 0
             && "Alignment is not power of 2");
