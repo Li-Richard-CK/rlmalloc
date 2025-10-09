@@ -11,6 +11,7 @@ const rl_page_t _rl_page_empty = (rl_page_t) {
     .ptr_start = 0,
 
     .next_page = NULL,
+    .prev_page = NULL,
 
     // padding
 };
@@ -24,15 +25,13 @@ const rl_partition_t _rl_part_empty = (rl_partition_t) {
 
     .size = 0,
     .pages = NULL,
-    .last_page = NULL,
     .ptr_start = 0,
     .ptr_end = 0,
 
     // padding
 };
 
-rl_decl_thread rl_partition_t *_rl_local_part =
-    (rl_partition_t *)&_rl_part_empty;
+rl_decl_thread rl_partition_t _rl_local_part = _rl_part_empty;
 static rl_partition_t _rl_global_part = _rl_part_empty;
 
 void _rl_main_part_init(void) {

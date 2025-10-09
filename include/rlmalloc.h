@@ -18,6 +18,8 @@
 // default size is 4KiB, set size = 0 if want default
 bool rl_new_page(rl_partition_t *part, size_t size, size_t size_class);
 
+void * rl_attr_malloc rl_attr_alloc_size(1) rl_malloc(size_t size);
+
 /* -----------------------------Inline functions---------------------------- */
 static inline void * rl_attr_always_inline rl_align(
         void *block,

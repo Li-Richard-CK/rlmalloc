@@ -10,13 +10,17 @@
 #define rl_attr_pure __attribute__((pure))
 #define rl_attr_malloc __attribute__((malloc))
 #define rl_attr_alloc_size(size) __attribute__((alloc_size(size)))
-#define rl_attr_alloc_size_2(size0, size1) __attribute__((alloc_size(size0, size1)))
+#define rl_attr_alloc_size_2(size0, size1) \
+    __attribute__((alloc_size(size0, size1)))
 #define rl_attr_non_null __attribute__((nonnull))
 #define rl_attr_warn_unused __attribute__((warn_unused_result))
 #define rl_attr_hidden __attribute__((visibility("hidden")))
 #define rl_attr_internal __attribute__((visibility("internal")))
 #define rl_attr_constructor __attribute__((constructor))
 #define rl_attr_destructor __attribute__((destructor))
+#define rl_attr_section(sec) __attribute__((section(sec)))
+#define rl_attr_section_aligned(sec, alignment) \
+    __attribute__((section(sec), aligned(alignment)))
 
 #define rl_decl_thread __thread
 
