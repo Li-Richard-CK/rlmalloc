@@ -20,16 +20,32 @@ struct out_s {
     double time_taken;
     double time_per_access;
 
-    uint32_t start_cycles;
-    uint32_t end_cycles;
-    uint32_t cycles_taken;
+    uint64_t start_cycles;
+    uint64_t end_cycles;
+    uint64_t cycles_taken;
     double cycles_per_access;
 };
 
+// for normal arm cpus
+/*
 static inline uint64_t get_ticks(void) {
     uint64_t val;
     asm volatile("mrs %0, cntvct_el0" : "=r" (val));
     return val;
+}
+*/
+
+// for arm cortex a9, needs kernel mode
+static inline void cortex_enable_pmu(void) {
+    uint32_t val = 0x5;
+    asm volatile("mcr p15, 0, %0, c9, c14, 0" :: "r" (val));
+}
+
+// for arm cortex a9, needs kernel mode
+static inline uint64_t cortex_get_ticks(void) {
+    uint32_t lo, hi;
+    asm volatile("mrrc p15, 0, %0, %1, c9" : "=r" (lo), "=r" (hi));
+    return ((uint64_t)hi << 32) | lo;
 }
 
 struct out_s *run_test(const size_t sizes[], const size_t n) {
@@ -46,6 +62,7 @@ struct out_s *run_test(const size_t sizes[], const size_t n) {
     }
 
     srand(time(NULL));
+    cortex_enable_pmu();
 
     for (size_t i = 0; i < n; i++) {
         outs[i].size = sizes[i];
@@ -67,7 +84,7 @@ struct out_s *run_test(const size_t sizes[], const size_t n) {
 
         printf("======== STARTING - %zuBYTES ========\n", outs[i].size);
         outs[i].start_time = (double)clock() / CLOCKS_PER_SEC;
-        outs[i].start_cycles = get_ticks();
+        outs[i].start_cycles = cortex_get_ticks();
         // everything after this line should only consist of
         // sample memory accessing and modifying
         // ISOLATION AREA :)))
@@ -88,12 +105,13 @@ struct out_s *run_test(const size_t sizes[], const size_t n) {
 
         // everything before this line should be finished
         printf("======== ENDING ========\n");
-        outs[i].end_cycles = get_ticks();
+        outs[i].end_cycles = cortex_get_ticks();
         outs[i].end_time = (double)clock() / CLOCKS_PER_SEC;
         outs[i].time_taken = outs[i].end_time - outs[i].start_time;
         outs[i].cycles_taken = outs[i].end_cycles - outs[i].start_cycles;
         outs[i].time_per_access = outs[i].time_taken / outs[i].accessed;
-        outs[i].cycles_per_access = (double)outs[i].cycles_taken / outs[i].accessed;
+        outs[i].cycles_per_access =
+            (double)outs[i].cycles_taken / outs[i].accessed;
         free(mem);
     }
 
@@ -122,9 +140,9 @@ int main(int argc, char *argv[]) {
             "\n\tTime taken(s): %.3f"
             "\n\tTime /access: %.9f"
             "\nCPU Cycles"
-            "\n\tStarting cycles: %u"
-            "\n\tEnding cycles: %u"
-            "\n\tCycles taken: %u"
+            "\n\tStarting cycles: %llu"
+            "\n\tEnding cycles: %llu"
+            "\n\tCycles taken: %llu"
             "\n\tCycles /access: %.3f\n",
             out.size,
             out.n,
