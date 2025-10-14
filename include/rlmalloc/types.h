@@ -10,7 +10,7 @@
 #include "internal.h"
 
 // stores thread id
-typedef uint64_t rl_thread_id_t;
+typedef uint32_t rl_thread_id_t;
 
 // one data
 typedef struct rl_ptr_s {

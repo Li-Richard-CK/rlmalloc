@@ -35,6 +35,8 @@ bool rl_new_page(rl_partition_t *part, size_t size, size_t size_class) {
         return false;
     }
 
+    _rl_concate_uint(1, 2);
+
     return true;
 }
 

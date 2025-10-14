@@ -1,3 +1,4 @@
+// this piece of thing does not work, illegal instruction mcr mrrc p15 for pmu and ticks
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
