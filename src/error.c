@@ -7,7 +7,7 @@ const char *rl_get_error(void) {
     return rl_error_msg;
 }
 
-void rl_set_error(const rl_attr_non_null char *msg) {
+void rl_set_error(const char *msg) {
     rl_error_msg = (char *)msg;
 }
 

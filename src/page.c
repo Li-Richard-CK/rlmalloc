@@ -22,7 +22,7 @@ bool rl_new_page(rl_partition_t *part, size_t size, size_t size_class) {
 #if defined(RL_DEBUG)
     assert(part != NULL);
     assert(size_class % 2 == 0 && "size class of page must be divible by 2");
-    assert((size & (size - 1)) == 0 || size == 0
+    assert(((size & (size - 1)) == 0 || size == 0)
             && "size of page must be power of 2");
     assert(part->flag == true && "partition must be initialised first");
 #endif

@@ -9,13 +9,11 @@ set(RLMALLOC_VERSION 1.0.0)
 
 set(CMAKE_BUILD_TYPE "Debug")
 
-add_compile_options(-Wall -Wextra -Werror)
-
-set(CMAKE_C_COMPILER gcc)
-set(CMAKE_SYSTEM_NAME linux)
-
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -target aarch64-linux-gnu")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_LINUX -D__linux__")
+add_compile_options(
+    -Wall
+    -Wextra
+    -Werror
+)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_definitions(RL_DEBUG)
