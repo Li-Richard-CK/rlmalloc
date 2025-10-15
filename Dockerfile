@@ -7,8 +7,9 @@ RUN apt update && \
     apt install -y software-properties-common && \
     add-apt-repository universe && \
     apt update && \
-    apt install -y valgrind kcachegrind build-essential gcc-arm-linux-gnueabihf cmake
+    apt install -y valgrind kcachegrind build-essential gcc-arm-linux-gnueabihf g++-arm-linux-gnueabihf cmake
 
-WORKDIR /workspace
+WORKDIR /workdir
 
 CMD ["bash"]
+
