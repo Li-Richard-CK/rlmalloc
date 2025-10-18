@@ -23,6 +23,8 @@ typedef struct rl_block_s {
     struct rl_block_s *next;
 } rl_block_t;
 
+#define RL_DEFAULT_PAGE_SIZE (4 * RL_ONE_KiB)
+
 // a page (just the metadata)
 typedef struct rl_attr_cache_line_alignment rl_page_s {
     uint32_t id; // partition id + index inside partition
@@ -37,9 +39,13 @@ typedef struct rl_attr_cache_line_alignment rl_page_s {
 
     // padding
     char _padding[
-        64 - (sizeof(uint32_t) + sizeof(size_t) 
-            + sizeof(rl_block_t *) + sizeof(uintptr_t)) % 64];
+        RL_CACHE_LINE_SIZE
+            - (sizeof(uint32_t) + sizeof(size_t) + sizeof(size_t)
+            + sizeof(void *) + sizeof(uintptr_t)
+            + sizeof(void *) + sizeof(void *)) % RL_CACHE_LINE_SIZE];
 } rl_page_t;
+
+#define RL_DEFAULT_PARTITION_SIZE (8 * RL_ONE_MiB)
 
 // a partition (aka the heap? just the metadata)
 typedef struct rl_attr_cache_line_alignment rl_partition_s {
@@ -50,18 +56,24 @@ typedef struct rl_attr_cache_line_alignment rl_partition_s {
     bool is_full;
 
     size_t size;
-    rl_page_t *pages; // address of the first page
+    // address of the first page
+    // which stores the metadata for all pages
+    rl_page_t *pages;
     uintptr_t ptr_start;
     uintptr_t ptr_end;
 
     // padding
     char _padding[
-        64 - (sizeof(uint32_t) + sizeof(rl_thread_id_t)
-                + sizeof(size_t) + sizeof(rl_page_t) + sizeof(uintptr_t)) % 64];
+        RL_CACHE_LINE_SIZE - (sizeof(uint32_t) + sizeof(rl_thread_id_t)
+                + sizeof(bool) + sizeof(bool)
+                + sizeof(size_t) + sizeof(rl_page_t)
+                + sizeof(uintptr_t) + sizeof(uintptr_t)) % RL_CACHE_LINE_SIZE];
 } rl_partition_t;
 
-static_assert(alignof(rl_page_t) == 64, "rl_page_t is not aligned");
-static_assert(alignof(rl_partition_t) == 64, "rl_partition_t is not aligned");
+static_assert(alignof(rl_page_t) == RL_CACHE_LINE_SIZE,
+        "rl_page_t is not aligned");
+static_assert(alignof(rl_partition_t) == RL_CACHE_LINE_SIZE,
+        "rl_partition_t is not aligned");
 
 #endif // RLMALLOC_TYPES_H
 

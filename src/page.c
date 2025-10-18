@@ -19,23 +19,37 @@ static inline uint32_t rl_attr_always_inline _rl_concate_uint(
 }
 
 bool rl_new_page(rl_partition_t *part, size_t size, size_t size_class) {
-#if defined(RL_DEBUG)
-    assert(part != NULL);
-    assert(size_class % 2 == 0 && "size class of page must be divible by 2");
-    assert(((size & (size - 1)) == 0 || size == 0)
+    rl_assert(part != NULL);
+    rl_assert(size_class % 2 == 0 && "size class of page must be divible by 2");
+    rl_assert(((size & (size - 1)) == 0 || size == 0)
             && "size of page must be power of 2");
-    assert(part->flag == true && "partition must be initialised first");
-#endif
-    uintptr_t next_block_addr =
-        (part->pages->prev_page->ptr_start
-         + part->pages->prev_page->size + 1);
+    rl_assert(part->flag == true && "partition must be initialised first");
 
-    if ((next_block_addr - 1) + size > part->ptr_end) {
-        rl_set_error("size of page too large");
+    uintptr_t next_mem = 
+        ((uintptr_t)(part->pages->prev_page) + part->pages->prev_page->size) + 1;
+
+    if (next_mem > part->ptr_end)
+    {
+        rl_set_error("not enough memory to allocate new page");
         return false;
     }
+   
+    // stores page metadata before each page
+    // not the most efficient, @todo
+    rl_page_t *new_page_md = (rl_page_t *)next_mem;
+    *new_page_md = (rl_page_t) {
+        .id = _rl_concate_uint(part->id, part->pages->prev_page->id + 1),
 
-    _rl_concate_uint(1, 2);
+        .size = size - sizeof(rl_page_t),
+        .size_class = size_class,
+        .blocks = (rl_block_t *)next_mem,
+        .ptr_start = next_mem,
+
+        .next_page = NULL,
+        .prev_page = part->pages->prev_page
+    };
+
+    part->pages->prev_page->next_page = new_page_md;
 
     return true;
 }

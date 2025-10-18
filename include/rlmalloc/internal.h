@@ -2,9 +2,13 @@
 #ifndef RLMALLOC_INTERNAL_H
 #define RLMALLOC_INTERNAL_H
 
+#include <assert.h>
+
+#define RL_CACHE_LINE_SIZE 32
+
 #if defined __GNUC__ || defined __clang__
 #define rl_attr_alignas(alignment) __attribute__((aligned(alignment)))
-#define rl_attr_cache_line_alignment rl_attr_alignas(64)
+#define rl_attr_cache_line_alignment rl_attr_alignas(RL_CACHE_LINE_SIZE)
 #define rl_attr_always_inline __attribute__((always_inline))
 #define rl_attr_const __attribute__((const))
 #define rl_attr_pure __attribute__((pure))
@@ -43,6 +47,12 @@
 #define rl_attr_destructor
 
 #define rl_decl_thread
+#endif
+
+#if defined RL_DEBUG
+#define rl_assert(v) assert(v)
+#else
+#define rl_assert(v)
 #endif
 
 #define RL_ONE_KiB (1ULL << 10)

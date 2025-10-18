@@ -39,13 +39,13 @@ static inline uint64_t get_ticks(void) {
 // for arm cortex a9, needs kernel mode
 static inline void cortex_enable_pmu(void) {
     uint32_t val = 0x5;
-    asm volatile("mcr p15, 0, %0, c9, c14, 0" :: "r" (val));
+    __asm__ volatile("mcr p15, 0, %0, c9, c14, 0" :: "r" (val));
 }
 
 // for arm cortex a9, needs kernel mode
 static inline uint64_t cortex_get_ticks(void) {
     uint32_t lo, hi;
-    asm volatile("mrrc p15, 0, %0, %1, c9" : "=r" (lo), "=r" (hi));
+    __asm__ volatile("mrrc p15, 0, %0, %1, c9" : "=r" (lo), "=r" (hi));
     return ((uint64_t)hi << 32) | lo;
 }
 
