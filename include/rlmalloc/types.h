@@ -6,6 +6,7 @@
 #include <stdalign.h>
 #include <assert.h>
 #include <stdbool.h>
+#include <stdatomic.h>
 
 #include "internal.h"
 
@@ -56,6 +57,7 @@ typedef struct rl_attr_cache_line_alignment rl_partition_s {
     bool is_full;
 
     size_t size;
+    rl_decl_atomic size_t size_allocated;
     // address of the first page
     // which stores the metadata for all pages
     rl_page_t *pages;
@@ -66,7 +68,7 @@ typedef struct rl_attr_cache_line_alignment rl_partition_s {
     char _padding[
         RL_CACHE_LINE_SIZE - (sizeof(uint32_t) + sizeof(rl_thread_id_t)
                 + sizeof(bool) + sizeof(bool)
-                + sizeof(size_t) + sizeof(rl_page_t)
+                + sizeof(size_t) + sizeof(size_t) + sizeof(rl_page_t)
                 + sizeof(uintptr_t) + sizeof(uintptr_t)) % RL_CACHE_LINE_SIZE];
 } rl_partition_t;
 

@@ -10,7 +10,10 @@ add_compile_options(
     -Wall
     -Wextra 
     -Werror
+    -march=armv8-a
 )
 
 add_executable(rlmalloc-page-size-test page-size-test.c)
+
+add_executable(rlmalloc-block-size-test block-size-test.c)
 

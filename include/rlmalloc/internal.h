@@ -3,6 +3,7 @@
 #define RLMALLOC_INTERNAL_H
 
 #include <assert.h>
+#include <stdatomic.h>
 
 #define RL_CACHE_LINE_SIZE 32
 
@@ -27,6 +28,7 @@
     __attribute__((section(sec), aligned(alignment)))
 
 #define rl_decl_thread __thread
+#define rl_decl_atomic _Atomic
 
 #else
 #warning "rlmalloc may not work without gnu-c/clang compiler"
