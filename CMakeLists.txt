@@ -16,18 +16,22 @@ add_compile_options(
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_definitions(RL_DEBUG)
-    add_compile_options(-g -O0)
+    add_compile_options(-g -O1)
 else()
     add_compile_options(-O2)
 endif()
+
+configure_file(
+    "${CMAKE_SOURCE_DIR}/default-config.h"
+    "${CMAKE_SOURCE_DIR}/include/config.h"
+    COPYONLY)
 
 set(rl_sources
     src/error.c
     src/alloc.c
     src/init.c
     src/partition.c
-    src/page.c
-    src/ps/thread.c)
+    src/page.c)
 
 add_library(rlmalloc SHARED ${rl_sources})
 set_target_properties(rlmalloc PROPERTIES

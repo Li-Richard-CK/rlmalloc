@@ -13,17 +13,6 @@
 // stores thread id
 typedef uint32_t rl_thread_id_t;
 
-// one data
-typedef struct rl_ptr_s {
-    uintptr_t origin;
-    size_t offset;
-} rl_ptr_t;
-
-// a memory block
-typedef struct rl_block_s {
-    struct rl_block_s *next;
-} rl_block_t;
-
 #define RL_DEFAULT_PAGE_SIZE (4 * RL_ONE_KiB)
 
 // a page (just the metadata)
@@ -32,11 +21,10 @@ typedef struct rl_attr_cache_line_alignment rl_page_s {
 
     size_t size;
     size_t size_class;
-    rl_block_t *blocks;
+    void *list;
     uintptr_t ptr_start;
 
     struct rl_page_s *next_page;
-    struct rl_page_s *prev_page;
 
     // padding
     char _padding[
@@ -61,14 +49,15 @@ typedef struct rl_attr_cache_line_alignment rl_partition_s {
     // address of the first page
     // which stores the metadata for all pages
     rl_page_t *pages;
+    rl_page_t *last_page;
     uintptr_t ptr_start;
     uintptr_t ptr_end;
 
     // padding
     char _padding[
         RL_CACHE_LINE_SIZE - (sizeof(uint32_t) + sizeof(rl_thread_id_t)
-                + sizeof(bool) + sizeof(bool)
-                + sizeof(size_t) + sizeof(size_t) + sizeof(rl_page_t)
+                + sizeof(bool) + sizeof(bool) + sizeof(size_t)
+                + sizeof(size_t) + sizeof(rl_page_t *) + sizeof(rl_page_t *)
                 + sizeof(uintptr_t) + sizeof(uintptr_t)) % RL_CACHE_LINE_SIZE];
 } rl_partition_t;
 

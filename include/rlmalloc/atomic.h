@@ -3,7 +3,7 @@
 
 #include <stdatomic.h>
 
-#define rl_atomic(fname) rl_atomic_#fname
+#define rl_atomic_fetch_add(v, in)
 
 #endif // RLMALLOC_ATOMIC_H
 

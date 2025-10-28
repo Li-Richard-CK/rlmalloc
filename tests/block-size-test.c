@@ -39,12 +39,8 @@ static inline uint64_t get_ticks(void) {
 }
 
 struct out_s *run_test(const size_t sizes[], const size_t n) {
-    static bool ran = false;
     static struct out_s *outs;
 
-    if (ran) return outs;
-    ran = true;
-    
     outs = (struct out_s *)calloc(n, sizeof(struct out_s));
     if (!outs) {
         perror("calloc failed");
@@ -88,7 +84,7 @@ struct out_s *run_test(const size_t sizes[], const size_t n) {
             for (k = 0; k < outs[i].size / 24; k++) {
                 struct a_24_byte_object_s *cur_data =
                     (struct a_24_byte_object_s *)(cur_block + k * 24);
-                // use xor so compiler no optimize
+                // use xor so no compiler optimiztions
                 cur_data->foo ^= ((uint64_t)rand() % 32);
                 cur_data->foo1 ^= ((uint64_t)rand() % 32);
                 cur_data->foo2 ^= ((uint64_t)rand() % 32);
@@ -103,7 +99,7 @@ struct out_s *run_test(const size_t sizes[], const size_t n) {
             }
         }
 
-        // everything before this line should be finished
+        // everything should be finished before this line
         printf("======== ENDING ========\n");
         outs[i].end_cycles = get_ticks();
         outs[i].end_time = (double)clock() / CLOCKS_PER_SEC;

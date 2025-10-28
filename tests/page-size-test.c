@@ -5,6 +5,7 @@
 #include <time.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <math.h>
 
 #define ONE_MB          (1ULL << 20)
 
@@ -49,12 +50,8 @@ static inline uint64_t cortex_get_ticks(void) {
 }
 */
 struct out_s *run_test(const size_t sizes[], const size_t n) {
-    static bool ran = false;
     static struct out_s *outs;
 
-    if (ran) return outs;
-    ran = true;
-    
     outs = (struct out_s *)calloc(n, sizeof(struct out_s));
     if (!outs) {
         perror("calloc failed");
@@ -103,7 +100,7 @@ struct out_s *run_test(const size_t sizes[], const size_t n) {
             }
         }
 
-        // everything before this line should be finished
+        // everything should be finished before this line 
         printf("======== ENDING ========\n");
         outs[i].end_cycles = /* cortex_get_ticks() */ get_ticks();
         outs[i].end_time = (double)clock() / CLOCKS_PER_SEC;

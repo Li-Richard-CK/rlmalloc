@@ -10,8 +10,6 @@ void *lr_malloc(size_t size) {
     if (!_rl_local_part_ptr)
         _rl_local_part_ptr = rl_get_local_partition();
 
-
-
     return NULL;
 }
 

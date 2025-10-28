@@ -20,37 +20,50 @@ static inline uint32_t rl_attr_always_inline _rl_concate_uint(
 
 bool rl_new_page(rl_partition_t *part, size_t size, size_t size_class) {
     rl_assert(part != NULL);
-    rl_assert(size_class % 2 == 0 && "size class of page must be divible by 2");
+    rl_assert(size_class % 2 == 0
+            && "size class of page must be divible by 2");
     rl_assert(((size & (size - 1)) == 0 || size == 0)
             && "size of page must be power of 2");
     rl_assert(part->flag == true && "partition must be initialised first");
-
-    uintptr_t next_mem = 
-        ((uintptr_t)(part->pages->prev_page) + part->pages->prev_page->size) + 1;
-
-    if (next_mem > part->ptr_end)
-    {
-        rl_set_error("not enough memory to allocate new page");
+    
+    if ((part->size_allocated + size) > part->size) {
+        rl_set_error("partition does not have enough space \
+                use main partition instead");
         return false;
     }
-   
-    // stores page metadata before each page
-    // not the most efficient, @todo
-    rl_page_t *new_page_md = (rl_page_t *)next_mem;
-    *new_page_md = (rl_page_t) {
-        .id = _rl_concate_uint(part->id, part->pages->prev_page->id + 1),
 
-        .size = size - sizeof(rl_page_t),
-        .size_class = size_class,
-        .blocks = (rl_block_t *)next_mem,
-        .ptr_start = next_mem,
+    if (!part->pages) {
+        part->pages = (rl_page_t *)(part->ptr_start);
 
-        .next_page = NULL,
-        .prev_page = part->pages->prev_page
-    };
+        part->pages->id = _rl_concate_uint(part->id, 0);
+        part->pages->size = RL_DEFAULT_PAGE_SIZE;
+        part->pages->size_class = 0;
+        part->pages->list = part->pages;
+        part->pages->ptr_start = (uintptr_t)(part->pages);
+        part->pages->next_page = NULL;
 
-    part->pages->prev_page->next_page = new_page_md;
+        part->last_page = part->pages;
+        part->size_allocated += RL_DEFAULT_PAGE_SIZE;
+    }
 
+    rl_page_t *new_page_md =
+        (rl_page_t *)((uintptr_t)(part->last_page) + sizeof(rl_page_t));
+    
+    new_page_md->id = _rl_concate_uint(part->id, part->last_page->id + 1);
+    new_page_md->size = size;
+    new_page_md->size_class = size_class;
+    new_page_md->ptr_start =
+        part->last_page->ptr_start + part->last_page->size;
+    new_page_md->list = (void *)(new_page_md->ptr_start);
+    new_page_md->next_page = NULL;
+
+    part->last_page->next_page = new_page_md;
+    part->last_page = new_page_md;
+
+    part->size_allocated += size;
+
+    if (part->size_allocated + size == part->size)
+        part->is_full = true;
     return true;
 }
 

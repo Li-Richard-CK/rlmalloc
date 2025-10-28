@@ -7,11 +7,10 @@ const rl_page_t _rl_page_empty = (rl_page_t) {
 
     .size = 0,
     .size_class = 0,
-    .blocks = NULL,
+    .list = NULL,
     .ptr_start = 0,
 
     .next_page = NULL,
-    .prev_page = NULL,
 
     // padding
 };
@@ -31,11 +30,12 @@ const rl_partition_t _rl_part_empty = (rl_partition_t) {
     // padding
 };
 
-rl_decl_thread rl_partition_t _rl_local_part = _rl_part_empty;
+rl_decl_thread rl_partition_t *_rl_local_part =
+    (rl_partition_t *)&_rl_part_empty;
 static rl_partition_t _rl_global_part = _rl_part_empty;
 
 rl_partition_t *rl_get_local_partition(void) {
-    return &_rl_local_part;
+    return _rl_local_part;
 }
 
 rl_partition_t *rl_get_global_partition(void) {
@@ -46,6 +46,10 @@ void _rl_main_part_init(void) {
     _rl_global_part.id = 0; // global partiton id must be 0
     _rl_global_part.thread_id = rl_get_thread_id();
     _rl_global_part.size = RL_DEFAULT_PARTITION_SIZE;
-    // set flags and allocate pages later (lazy load)
+
+#if RL_LAZY_LOAD
+#else
+    
+#endif
 }
 
