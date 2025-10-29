@@ -7,6 +7,8 @@
 #include <stdint.h>
 #include <math.h>
 
+#include "cpu-cycles.h"
+
 #define ONE_MB          (1ULL << 20)
 
 struct out_s {
@@ -81,7 +83,8 @@ struct out_s *run_test(const size_t sizes[], const size_t n) {
 
         printf("======== STARTING - %zuBYTES ========\n", outs[i].size);
         outs[i].start_time = (double)clock() / CLOCKS_PER_SEC;
-        outs[i].start_cycles = /* cortex_get_ticks() */ get_ticks();
+        outs[i].start_cycles =
+            /* cortex_get_ticks() get_ticks() */ get_cpu_cycles();
         // everything after this line should only consist of
         // sample memory accessing and modifying
         // ISOLATION AREA :)))
@@ -102,7 +105,8 @@ struct out_s *run_test(const size_t sizes[], const size_t n) {
 
         // everything should be finished before this line 
         printf("======== ENDING ========\n");
-        outs[i].end_cycles = /* cortex_get_ticks() */ get_ticks();
+        outs[i].end_cycles =
+            /* cortex_get_ticks() get_ticks() */ get_cpu_cycles();
         outs[i].end_time = (double)clock() / CLOCKS_PER_SEC;
         outs[i].time_taken = outs[i].end_time - outs[i].start_time;
         outs[i].cycles_taken = outs[i].end_cycles - outs[i].start_cycles;

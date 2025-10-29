@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <time.h>
 
+#include "cpu-cycles.h"
+
 #define ITERATIONS 10000
 
 struct out_s {
@@ -45,13 +47,13 @@ struct out_s run_test() {
     for (int i = 0; i < ITERATIONS; i++) {
         int size = (int)rand() % 64;
         start_time = (double)clock() / CLOCKS_PER_SEC;
-        start_cycles = get_ticks();
+        start_cycles = /* get_ticks() */ get_cpu_cycles();
         // yeah, again. anything but allocations
 
         void *mem = malloc(size);
 
         // everything should be done before this line
-        end_cycles = get_ticks();
+        end_cycles = /* get_ticks() */ get_cpu_cycles();
         end_time = (double)clock() / CLOCKS_PER_SEC;
         out.cycles_sum += end_cycles - start_cycles;
         out.time_sum += end_time - start_time;
