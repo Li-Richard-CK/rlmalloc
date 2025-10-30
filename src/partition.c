@@ -44,10 +44,12 @@ rl_partition_t *rl_get_global_partition(void) {
 
 void _rl_main_part_init(void) {
     _rl_global_part.thread_id = rl_get_thread_id();
-    _rl_global_part.size = RL_DEFAULT_PARTITION_SIZE;
+    _rl_global_part.size = RL_DEFAULT_HEAP_SIZE;
     _rl_global_part.ptr_start = (uintptr_t)__heap_start;
 
     _rl_global_part.flag = true; // partition is initialized
+
+    _rl_local_part = &_rl_global_part;
 
 #if RL_LAZY_LOAD
 // probably for non-real-time systems

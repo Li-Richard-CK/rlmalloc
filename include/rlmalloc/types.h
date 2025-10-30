@@ -6,7 +6,6 @@
 #include <stdalign.h>
 #include <assert.h>
 #include <stdbool.h>
-#include <stdatomic.h>
 
 #include "internal.h"
 

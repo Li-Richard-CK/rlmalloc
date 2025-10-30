@@ -1,12 +1,13 @@
-#include <stdio.h>
+/*#include <stdio.h>
 #include <stdint.h>
 #include <pthread.h>
 #include <assert.h>
-#include <stdlib.h>
+#include <stdlib.h>*/
 
-//extern char __heap_start[];
+extern char __heap_start[];
 
 int main(int argc, char *argv[]) {
+    /*
     (void)argc;
     (void)argv;
 
@@ -36,8 +37,9 @@ int main(int argc, char *argv[]) {
     tls_ptr2 = pthread_getspecific(key);
     printf("%p\n", tls_ptr2);
     pthread_key_delete(key);
+    */
 
-    //printf("%p\n", __heap_start);
+    printf("%p\n", __heap_start);
 
     return 0;
 }

@@ -7,6 +7,6 @@ void rl_attr_constructor _rl_auto_init(void) {
 }
 
 void rl_attr_destructor _rl_auto_deinit(void) {
-    // @todo
+    // actually nothing to do but just here for umm... completeness?
 }
 
