@@ -34,11 +34,10 @@ typedef struct rl_attr_cache_line_alignment rl_page_s {
             + sizeof(void *) + sizeof(void *)) % RL_CACHE_LINE_SIZE];
 } rl_page_t;
 
-#define RL_DEFAULT_PARTITION_SIZE (8 * RL_ONE_MiB)
+#define RL_DEFAULT_PARTITION_SIZE RL_ONE_MiB
 
 // a partition (aka the heap? just the metadata)
 typedef struct rl_attr_cache_line_alignment rl_partition_s {
-    uint32_t id; // index of partition
     rl_thread_id_t thread_id;
 
     bool flag; // for checking whether this partition is initiated
@@ -51,14 +50,13 @@ typedef struct rl_attr_cache_line_alignment rl_partition_s {
     rl_page_t *pages;
     rl_page_t *last_page;
     uintptr_t ptr_start;
-    uintptr_t ptr_end;
 
     // padding
     char _padding[
-        RL_CACHE_LINE_SIZE - (sizeof(uint32_t) + sizeof(rl_thread_id_t)
+        RL_CACHE_LINE_SIZE - (sizeof(rl_thread_id_t)
                 + sizeof(bool) + sizeof(bool) + sizeof(size_t)
                 + sizeof(size_t) + sizeof(rl_page_t *) + sizeof(rl_page_t *)
-                + sizeof(uintptr_t) + sizeof(uintptr_t)) % RL_CACHE_LINE_SIZE];
+                + sizeof(uintptr_t)) % RL_CACHE_LINE_SIZE];
 } rl_partition_t;
 
 static_assert(alignof(rl_page_t) == RL_CACHE_LINE_SIZE,

@@ -18,6 +18,9 @@
 // default size is 4KiB, set size = 0 if want default
 bool rl_new_page(rl_partition_t *part, size_t size, size_t size_class);
 
+// page must be initialized before initializing the free-block-list
+bool rl_list_init(rl_page_t *page, size_t size_class);
+
 rl_partition_t *rl_get_local_partition(void);
 rl_partition_t *rl_get_global_partition(void);
 

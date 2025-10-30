@@ -12,11 +12,12 @@ set(CMAKE_BUILD_TYPE "Debug")
 add_compile_options(
     -Wall
     -Wextra
-    -Werror)
+    -Werror
+    -ffreestanding)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_definitions(RL_DEBUG)
-    add_compile_options(-g -O1)
+    add_compile_options(-g -O0)
 else()
     add_compile_options(-O2)
 endif()
@@ -37,4 +38,6 @@ add_library(rlmalloc SHARED ${rl_sources})
 set_target_properties(rlmalloc PROPERTIES
     VERSION ${RLMALLOC_VERSION})
 target_include_directories(rlmalloc PUBLIC include)
+
+target_link_options(rlmalloc PRIVATE -T "${PROJECT_SOURCE_DIR}/map-heap-tls.ld")
 

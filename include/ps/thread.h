@@ -5,13 +5,13 @@
 #include "rlmalloc/internal.h"
 
 // internal thread id, not from OS
-inline static rl_attr_always_inline rl_thread_id_t rl_get_thread_id(void) {
+inline static rl_thread_id_t rl_get_thread_id(void) {
     static rl_thread_id_t id = 0;
     id++;
     return id;
 }
 
-inline static rl_attr_always_inline uintptr_t rl_get_tls(void) {
+inline static uintptr_t rl_get_tls(void) {
     uintptr_t ptr = 0;
     __asm__ volatile(
             "mrc p15, 0, %0, c13, c0, 2\n"

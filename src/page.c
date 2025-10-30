@@ -35,7 +35,7 @@ bool rl_new_page(rl_partition_t *part, size_t size, size_t size_class) {
     if (!part->pages) {
         part->pages = (rl_page_t *)(part->ptr_start);
 
-        part->pages->id = _rl_concate_uint(part->id, 0);
+        part->pages->id = _rl_concate_uint(part->thread_id, 0);
         part->pages->size = RL_DEFAULT_PAGE_SIZE;
         part->pages->size_class = 0;
         part->pages->list = part->pages;
@@ -49,7 +49,8 @@ bool rl_new_page(rl_partition_t *part, size_t size, size_t size_class) {
     rl_page_t *new_page_md =
         (rl_page_t *)((uintptr_t)(part->last_page) + sizeof(rl_page_t));
     
-    new_page_md->id = _rl_concate_uint(part->id, part->last_page->id + 1);
+    new_page_md->id =
+        _rl_concate_uint(part->thread_id, part->last_page->id + 1);
     new_page_md->size = size;
     new_page_md->size_class = size_class;
     new_page_md->ptr_start =
@@ -64,6 +65,14 @@ bool rl_new_page(rl_partition_t *part, size_t size, size_t size_class) {
 
     if (part->size_allocated + size == part->size)
         part->is_full = true;
+    return true;
+}
+
+bool rl_list_init(rl_page_t *page, size_t size_class) {
+    rl_assert(page != NULL);
+    rl_assert(size_class % 2 == 0
+            && "size class of page must be divible by 2");
+
     return true;
 }
 

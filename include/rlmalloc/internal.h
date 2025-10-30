@@ -60,5 +60,7 @@
 #define RL_ONE_KiB (1ULL << 10)
 #define RL_ONE_MiB (1ULL << 20)
 
+#define RL_DEFAULT_BLOCK_SIZE (256U)//bytes
+
 #endif // RLMALLOC_INTERNAL_H
 
