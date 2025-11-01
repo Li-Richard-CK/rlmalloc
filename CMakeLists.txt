@@ -34,10 +34,19 @@ set(rl_sources
     src/partition.c
     src/page.c)
 
-add_library(rlmalloc SHARED ${rl_sources})
-set_target_properties(rlmalloc PROPERTIES
+add_library(rlmalloc-static STATIC ${rl_sources})
+set_target_properties(rlmalloc-static PROPERTIES
+    OUTPUT_NAME "rlmalloc-static"
     VERSION ${RLMALLOC_VERSION})
-target_include_directories(rlmalloc PUBLIC include)
+target_include_directories(rlmalloc-static PUBLIC include)
+target_link_options(rlmalloc-static PRIVATE
+        -T "${PROJECT_SOURCE_DIR}/map-heap-tls.ld"
+        -u __rlmalloc_ctor) # AI generated this line only
 
-target_link_options(rlmalloc PRIVATE -T "${PROJECT_SOURCE_DIR}/map-heap-tls.ld")
+add_library(rlmalloc-shared SHARED ${rl_sources})
+set_target_properties(rlmalloc-shared PROPERTIES
+    OUTPUT_NAME "rlmalloc-shared"
+    VERSION ${RLMALLOC_VERSION})
+target_include_directories(rlmalloc-shared PUBLIC include)
+target_link_options(rlmalloc-shared PRIVATE -T "${PROJECT_SOURCE_DIR}/map-heap-tls.ld")
 

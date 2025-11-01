@@ -32,7 +32,8 @@ rl_decl_thread rl_partition_t *_rl_local_part =
     (rl_partition_t *)&_rl_part_empty;
 static rl_partition_t _rl_global_part = _rl_part_empty;
 
-extern char __heap_start[];
+extern char __heap_start;
+char *__rl_heap_start = &__heap_start;
 
 rl_partition_t *rl_get_local_partition(void) {
     return _rl_local_part;
@@ -45,7 +46,7 @@ rl_partition_t *rl_get_global_partition(void) {
 void _rl_main_part_init(void) {
     _rl_global_part.thread_id = rl_get_thread_id();
     _rl_global_part.size = RL_DEFAULT_HEAP_SIZE;
-    _rl_global_part.ptr_start = (uintptr_t)__heap_start;
+    _rl_global_part.ptr_start = (uintptr_t)__rl_heap_start;
 
     _rl_global_part.flag = true; // partition is initialized
 
