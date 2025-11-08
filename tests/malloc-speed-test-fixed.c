@@ -19,11 +19,13 @@ struct out_s {
     double average_cycles;
 };
 
+/*
 static inline uint64_t get_ticks(void) {
     uint64_t val;
     asm volatile("mrs %0, cntvct_el0" : "=r" (val));
     return val;
 }
+*/
 
 struct out_s run_test(const size_t size) {
     struct out_s out = {
@@ -43,17 +45,19 @@ struct out_s run_test(const size_t size) {
     uint64_t start_cycles = 0;
     uint64_t end_cycles = 0;
 
+    //enable_pmccntr();
+
     printf("======== STARTING ========\n");    
     // simple, yet it works
     for (int i = 0; i < ITERATIONS; i++) {
         start_time = (double)clock() / CLOCKS_PER_SEC;
-        start_cycles = /* get_ticks() */ get_cpu_cycles();
+        start_cycles = /* get_ticks() */ get_cpu_ticks();
         // yeah, again. anything but allocations
 
         void *mem = malloc(size);
 
         // everything should be done before this line
-        end_cycles = /* get_ticks() */ get_cpu_cycles();
+        end_cycles = /* get_ticks() */ get_cpu_ticks();
         end_time = (double)clock() / CLOCKS_PER_SEC;
         out.cycles_sum += end_cycles - start_cycles;
         out.time_sum += end_time - start_time;
@@ -71,7 +75,6 @@ struct out_s run_test(const size_t size) {
 
 int main(int argc, char *argv[]) {
     (void)argc;
-    (void)argv;
 
     struct out_s out = run_test(atoi(argv[1]));
 

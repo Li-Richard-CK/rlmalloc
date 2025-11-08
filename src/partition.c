@@ -1,31 +1,28 @@
 #include "rlmalloc/types.h"
 #include "rlmalloc/internal.h"
 #include "ps/thread.h"
+#include "rlmalloc.h"
 
-const rl_page_t _rl_page_empty = (rl_page_t) {
-    .id = 0,
+// just an empty page
+const rl_page_t _rl_page_empty      = (rl_page_t) {
+    .size                           = 0,
+    .size_class                     = 0,
+    .list                           = NULL,
+    .ptr_start                      = 0,
 
-    .size = 0,
-    .size_class = 0,
-    .list = NULL,
-    .ptr_start = 0,
-
-    .next_page = NULL,
-
-    // padding
+    .next_page                      = NULL,
 };
 
+// just an empty partition
 const rl_partition_t _rl_part_empty = (rl_partition_t) {
-    .thread_id = 0,
+    .thread_id                      = 0,
   
-    .flag = false,
-    .is_full = false,
+    .flag                           = false,
+    .is_full                        = false,
 
-    .size = 0,
-    .pages = NULL,
-    .ptr_start = 0,
-
-    // padding
+    .size                           = 0,
+    .pages                          = NULL,
+    .ptr_start                      = 0,
 };
 
 rl_decl_thread rl_partition_t *_rl_local_part =
@@ -55,8 +52,8 @@ void _rl_main_part_init(void) {
 #if RL_LAZY_LOAD
 // probably for non-real-time systems
 #else
-// SPEED
-    
+// SPEED, initialize earlier
+    rl_new_page(&_rl_global_part, RL_DEFAULT_PAGE_SIZE, 8); // early stage testing
 #endif
 }
 

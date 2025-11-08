@@ -31,11 +31,13 @@ struct out_s {
 };
 
 // for normal arm cpus
+/*
 static inline uint64_t get_ticks(void) {
     uint64_t val;
     asm volatile("mrs %0, cntvct_el0" : "=r" (val));
     return val;
 }
+*/
 
 /*
 // for arm cortex a9, needs kernel mode
@@ -62,6 +64,7 @@ struct out_s *run_test(const size_t sizes[], const size_t n) {
 
     srand(time(NULL));
     //cortex_enable_pmu();
+    //enable_pmccntr();
 
     for (size_t i = 0; i < n; i++) {
         outs[i].size = sizes[i];
@@ -84,7 +87,7 @@ struct out_s *run_test(const size_t sizes[], const size_t n) {
         printf("======== STARTING - %zuBYTES ========\n", outs[i].size);
         outs[i].start_time = (double)clock() / CLOCKS_PER_SEC;
         outs[i].start_cycles =
-            /* cortex_get_ticks() get_ticks() */ get_cpu_cycles();
+            /* cortex_get_ticks() get_ticks() */ get_cpu_ticks();
         // everything after this line should only consist of
         // sample memory accessing and modifying
         // ISOLATION AREA :)))
@@ -106,7 +109,7 @@ struct out_s *run_test(const size_t sizes[], const size_t n) {
         // everything should be finished before this line 
         printf("======== ENDING ========\n");
         outs[i].end_cycles =
-            /* cortex_get_ticks() get_ticks() */ get_cpu_cycles();
+            /* cortex_get_ticks() get_ticks() */ get_cpu_ticks();
         outs[i].end_time = (double)clock() / CLOCKS_PER_SEC;
         outs[i].time_taken = outs[i].end_time - outs[i].start_time;
         outs[i].cycles_taken = outs[i].end_cycles - outs[i].start_cycles;

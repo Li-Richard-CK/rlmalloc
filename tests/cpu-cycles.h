@@ -2,63 +2,49 @@
 #define CPU_CYCLES_H
 
 #include <stdint.h>
-#include <errno.h>
-#include <string.h>      /* memset */
-#include <unistd.h>      /* syscall */
-#include <sys/syscall.h> /* __NR_perf_event_open */
-#include <linux/perf_event.h>
-#include <sys/ioctl.h>
 
-static inline int __perf_event_open(struct perf_event_attr *pe,
-                                    pid_t pid, int cpu,
-                                    int group_fd, unsigned long flags)
-{
-    return (int)syscall(__NR_perf_event_open, pe, pid, cpu, group_fd, flags);
+/*
+// for arm cortex a9, needs kernel mode
+static inline void cortex_enable_pmu(void) {
+    uint32_t val = 0x5;
+    __asm__ volatile("mcr p15, 0, %0, c9, c14, 0" :: "r" (val));
 }
 
-/* Thread-local file descriptor (one counter per thread) */
-static __thread int perf_fd = -1;
+// for arm cortex a9, needs kernel mode
+static inline uint64_t cortex_get_ticks(void) {
+    uint32_t lo, hi;
+    __asm__ volatile("mrrc p15, 0, %0, %1, c9" : "=r" (lo), "=r" (hi));
+    return ((uint64_t)hi << 32) | lo;
+}
+*/
 
-/* Initialise the counter on first call */
-static inline void __init_cpu_cycles(void)
+
+// enable PMCCNTR performance monitor register
+// due to kernel mode issues, the original kernel space code is replaced
+// by this AI generated code, but STILL "Illegal instruction"
+/*
+static inline void enable_pmccntr(void)
 {
-    struct perf_event_attr attr = {0};
-    attr.type           = PERF_TYPE_HARDWARE;
-    attr.size           = sizeof(attr);
-    attr.config         = PERF_COUNT_HW_CPU_CYCLES;
-    attr.disabled       = 1;          /* start stopped */
-    attr.exclude_kernel = 1;          /* optional – ignore kernel cycles */
-    attr.exclude_hv     = 1;          /* optional – ignore hypervisor */
+    // asm volatile("mcr p15, 0, %0, c9, c14, 0" :: "r"(1));
+    // asm volatile("mcr p15, 0, %0, c9, c12, 1" :: "r"(0x8000000f));
 
-    perf_fd = __perf_event_open(&attr, 0 /*self*/, -1 /*any cpu*/, -1, 0);
-    if (perf_fd == -1) {
-        /* Caller can inspect errno */
-        return;
-    }
-    /* Reset to zero */
-    ioctl(perf_fd, PERF_EVENT_IOC_RESET, 0);
-    ioctl(perf_fd, PERF_EVENT_IOC_ENABLE, 0);
+    asm volatile("mcr p15, 0, %0, c9, c14, 0" :: "r"(1));
+    asm volatile("mcr p15, 0, %0, c9, c12, 0" :: "r"(1|1<<3));
+    asm volatile("mcr p15, 0, %0, c9, c12, 3" :: "r"(0x8000000f));
 }
 
-/**
- * get_cpu_cycles() – return the current CPU cycle count.
- *
- * Returns 0 on error (check errno).  The counter is *enabled* once
- * and left running for the lifetime of the thread.
- */
-static inline uint64_t get_cpu_cycles(void)
+static inline uint64_t get_cpu_ticks(void)
 {
-    uint64_t val = 0;
+    uint32_t low, high;
+    asm volatile("mrrc p15, 0, %0, %1, c9" : "=r"(low), "=r"(high));
+    return ((uint64_t)high << 32) | low;
+}
+*/
 
-    if (perf_fd == -1)               /* first call – try to open */
-        __init_cpu_cycles();
-
-    if (perf_fd == -1)               /* still failed */
-        return 0;
-
-    if (read(perf_fd, &val, sizeof(val)) != sizeof(val))
-        return 0;                    /* read error – keep errno */
-
+// just gonna run the tests on local machine
+static inline uint64_t get_cpu_ticks(void) {
+    uint64_t val;
+    asm volatile("mrs %0, cntvct_el0" : "=r" (val));
     return val;
 }
 

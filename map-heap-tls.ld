@@ -30,42 +30,31 @@ SECTIONS
 }
 */
 
-/* AI generated to avoid linking errors, by Grok */
 ENTRY(_start)
 
 SECTIONS
 {
     . = 0x400000;
 
-    /* Interp section for dynamic linking */
     .interp : { *(.interp) }
 
-    /* Note sections */
     .note.gnu.build-id : { *(.note.gnu.build-id) }
     .note.ABI-tag : { *(.note.ABI-tag) }
 
-    /* Text segment */
-    .text : {
-        *(.text .text.*)
-    }
- 
-    /* Read-only data */
+    .text : { *(.text .text.*) }
     .rodata : { *(.rodata .rodata.*) }
-
-    /* Data segment */
     .data : { *(.data .data.*) }
-
-    /* BSS segment */
     .bss : { *(.bss .bss.*) }
 
-    /* Your custom sections */
     .heap (NOLOAD) : {
-        . = ALIGN(4096);
+        . = ALIGN(4096); /* page size */
         __heap_start = .;
-        . = . + 8M;
+        . = . + 1M;
         __heap_end = .;
     }
 
+    /* multi-threading might not be able to be implemented due to time constraints */
+    /* TLS */
     .tdata : {
         . = ALIGN(8);
         __tdata_start = .;
