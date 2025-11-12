@@ -12,6 +12,9 @@
 // stores thread id
 typedef uint32_t rl_thread_id_t;
 
+// statistics counter per page for runtime allocator tuning
+#define RL_STATS_COUNTER(v) volatile uint32_t v
+
 #define RL_DEFAULT_PAGE_SIZE (4 * RL_ONE_KiB)
 #define RL_DEFAULT_METADATA_PAGE_SIZE (2 * RL_DEFAULT_PAGE_SIZE)
 
@@ -22,10 +25,15 @@ typedef struct rl_attr_packed rl_page_s {
     size_t                          size_class;
     void *                          list;
     uintptr_t                       ptr_start;
+   
+    // allocation amount counter
+    RL_STATS_COUNTER(alloc_n);
 
+    /* stored in FPGA BRAM, only for small pages (<= 128bytes)
     // again extra data 4 bytes
     // cool stuff
     uint32_t                        bitmap;
+    */
 
     struct rl_page_s *              next_page;
 } rl_page_t;
@@ -48,12 +56,15 @@ typedef struct rl_attr_cache_line_alignment rl_partition_s {
     rl_page_t *                     last_page;
     uintptr_t                       ptr_start;
 
+    // 32bits of 'registers'
+    volatile uint32_t *             dma_region;
+
     // padding
     char _padding[
         RL_CACHE_LINE_SIZE - (sizeof(rl_thread_id_t)
                 + sizeof(bool) + sizeof(bool) + sizeof(size_t)
                 + sizeof(size_t) + sizeof(rl_page_t *) + sizeof(rl_page_t *)
-                + sizeof(uintptr_t)) % RL_CACHE_LINE_SIZE];
+                + sizeof(uintptr_t) + sizeof(uint32_t *)) % RL_CACHE_LINE_SIZE];
 } rl_partition_t;
 
 static_assert(alignof(rl_partition_t) == RL_CACHE_LINE_SIZE,

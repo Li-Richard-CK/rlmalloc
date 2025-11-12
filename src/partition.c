@@ -10,6 +10,8 @@ const rl_page_t _rl_page_empty      = (rl_page_t) {
     .list                           = NULL,
     .ptr_start                      = 0,
 
+    .alloc_n                        = 0,
+
     .next_page                      = NULL,
 };
 
@@ -23,6 +25,8 @@ const rl_partition_t _rl_part_empty = (rl_partition_t) {
     .size                           = 0,
     .pages                          = NULL,
     .ptr_start                      = 0,
+
+    .dma_region                     = NULL,
 };
 
 rl_decl_thread rl_partition_t *_rl_local_part =
@@ -53,7 +57,10 @@ void _rl_main_part_init(void) {
 // probably for non-real-time systems
 #else
 // SPEED, initialize earlier
-    rl_new_page(&_rl_global_part, RL_DEFAULT_PAGE_SIZE, 8); // early stage testing
+    // small pages (64 pages)
+    for (size_t size_class; size_class <= 128; size_class += 2) {
+        rl_new_page(&_rl_global_part, RL_DEFAULT_PAGE_SIZE, size_class);
+    }
 #endif
 }
 

@@ -63,6 +63,13 @@ bool rl_new_page(rl_partition_t *part, size_t size, size_t size_class) {
 
         part->last_page = part->pages;
         part->size_allocated += RL_DEFAULT_METADATA_PAGE_SIZE;
+
+        part->dma_region = (volatile uint32_t *)
+        //  base                           next page address      buffer size
+            (part->pages->ptr_start + RL_DEFAULT_METADATA_PAGE_SIZE - 32);
+
+        rl_assert((uintptr_t)(part->dma_region) & 3 == 0
+                && "DMA region must be 32bits");
     }
 
     rl_page_t *new_page_md =
@@ -96,10 +103,12 @@ bool rl_list_init(rl_page_t *page, size_t size_class) {
         // loop through the entire 4KiB/(size) page
         void **ptr = (void **)(page->ptr_start);
         for (size_t i = 0; i < page->size / RL_DEFAULT_BLOCK_SIZE - 1; i++) {
+            // set each block to be 256bytes
             void **next = (void **)((uintptr_t)ptr + RL_DEFAULT_BLOCK_SIZE);
             *ptr = next;
             ptr = next;
-        }
+        } // ngl this is kinda slow for an entire partition
+          // @todo make this faster
         *ptr = NULL;
         page->list = (void *)(page->ptr_start);
     }
