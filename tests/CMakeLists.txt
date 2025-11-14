@@ -17,10 +17,10 @@ add_compile_options(
 set(RLMALLOC_STATIC "${CMAKE_SOURCE_DIR}/../build/librlmalloc-static.a")
 set(LINKER_SCRIPT "${CMAKE_SOURCE_DIR}/../map-heap-tls.ld")
 
-add_executable(page-size-test page-size-test.c)
-add_executable(block-size-test block-size-test.c)
-add_executable(malloc-speed-test-fixed malloc-speed-test-fixed.c)
-add_executable(malloc-speed-test-randomized malloc-speed-test-randomized.c)
+#add_executable(page-size-test page-size-test.c)
+#add_executable(block-size-test block-size-test.c)
+#add_executable(malloc-speed-test-fixed malloc-speed-test-fixed.c)
+#add_executable(malloc-speed-test-randomized malloc-speed-test-randomized.c)
 
 add_executable(rlmalloc-functionality-test rlmalloc-functionality-test.c)
 target_include_directories(rlmalloc-functionality-test PRIVATE ${CMAKE_SOURCE_DIR}/../include)

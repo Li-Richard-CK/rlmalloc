@@ -56,7 +56,8 @@ typedef struct rl_attr_cache_line_alignment rl_partition_s {
     rl_page_t *                     last_page;
     uintptr_t                       ptr_start;
 
-    // 32bits of 'registers'
+    // doing this for future multithreading support
+    // 32bytes of 32bits 'registers'
     volatile uint32_t *             dma_region;
 
     // padding

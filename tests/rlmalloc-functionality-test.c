@@ -12,7 +12,12 @@ int main(int argc, char *argv[]) {
 
     rl_partition_t *global_part = rl_get_global_partition();
     printf("%d\n", global_part->flag);
-    printf("%p %u\n", global_part, global_part->ptr_start);
+    printf("%p %lu\n", global_part, global_part->ptr_start);
+    printf("%zu %zu\n", global_part->pages[0].size, global_part->pages[0].size_class);
+
+    for (int i = 0; i < 254; i++) {
+     printf("%zu %zu\n", global_part->pages[i + 2].size, global_part->pages[i + 2].size_class);
+    }
 
     return 0;
 }

@@ -58,7 +58,7 @@ void _rl_main_part_init(void) {
 #else
 // SPEED, initialize earlier
     // small pages (64 pages)
-    for (size_t size_class; size_class <= 128; size_class += 2) {
+    for (size_t size_class = 8; size_class <= 128; size_class += 2) {
         rl_new_page(&_rl_global_part, RL_DEFAULT_PAGE_SIZE, size_class);
     }
 #endif

@@ -18,6 +18,7 @@ static inline uint32_t rl_attr_always_inline _rl_concate_uint(
     return a * 10000 + b;
 }
 
+/*
 // round up the next power of 2
 static size_t rl_attr_unused rl_det_psize(size_t n, size_t size_class) {
     rl_assert(size_class % 2 == 0
@@ -37,6 +38,7 @@ static size_t rl_attr_unused rl_det_psize(size_t n, size_t size_class) {
 #endif
     return v + 1;
 }
+*/
 
 bool rl_new_page(rl_partition_t *part, size_t size, size_t size_class) {
     rl_assert(part != NULL);
@@ -65,10 +67,11 @@ bool rl_new_page(rl_partition_t *part, size_t size, size_t size_class) {
         part->size_allocated += RL_DEFAULT_METADATA_PAGE_SIZE;
 
         part->dma_region = (volatile uint32_t *)
+        // 32 bytes buffer of 32 bits registers, 8 registers present
         //  base                           next page address      buffer size
             (part->pages->ptr_start + RL_DEFAULT_METADATA_PAGE_SIZE - 32);
 
-        rl_assert((uintptr_t)(part->dma_region) & 3 == 0
+        rl_assert(((uintptr_t)(part->dma_region) & 3) == 0
                 && "DMA region must be 32bits");
     }
 
