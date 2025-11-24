@@ -46,7 +46,9 @@ rl_partition_t *rl_get_global_partition(void) {
 
 void _rl_main_part_init(void) {
     _rl_global_part.thread_id = rl_get_thread_id();
-    _rl_global_part.size = RL_DEFAULT_HEAP_SIZE;
+    // the partition is still of normal partition size (1MiB),
+    // but it can expand to 2MiB on request
+    _rl_global_part.size = RL_DEFAULT_PARTITION_SIZE;
     _rl_global_part.ptr_start = (uintptr_t)__rl_heap_start;
 
     _rl_global_part.flag = true; // partition is initialized
@@ -57,7 +59,7 @@ void _rl_main_part_init(void) {
 // probably for non-real-time systems
 #else
 // SPEED, initialize earlier
-    // small pages (64 pages)
+    // small pages (64 pages), ngl this is kinda slow
     for (size_t size_class = 8; size_class <= 128; size_class += 2) {
         rl_new_page(&_rl_global_part, RL_DEFAULT_PAGE_SIZE, size_class);
     }

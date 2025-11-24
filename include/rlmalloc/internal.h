@@ -44,6 +44,10 @@
 #define RL_ONE_MiB                      (1ULL << 20)
 
 #define RL_DEFAULT_BLOCK_SIZE           (256U) //bytes
+// heap is different from partitions.
+// heap is just a 2MiB memory region;
+// partition is a 1MiB collection of data.
+// a partition is expandable while a heap is not.
 #define RL_DEFAULT_HEAP_SIZE            (2 * RL_ONE_MiB) // 2MiB
 
 #endif // RLMALLOC_INTERNAL_H
