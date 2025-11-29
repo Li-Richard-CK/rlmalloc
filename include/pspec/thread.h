@@ -5,6 +5,8 @@
 #include "rlmalloc/internal.h"
 
 // internal thread id, not from OS
+// bc probably wont involve os tasks in the future,
+// for a truly embedded memory allocator
 inline static rl_thread_id_t rl_get_thread_id(void) {
     static rl_thread_id_t id = 0;
     id++;

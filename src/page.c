@@ -66,12 +66,12 @@ bool rl_new_page(rl_partition_t *part, size_t size, size_t size_class) {
         part->last_page = part->pages;
         part->size_allocated += RL_DEFAULT_METADATA_PAGE_SIZE;
 
-        part->dma_region = (volatile uint32_t *)
+        part->dma_registers = (volatile uint32_t *)
         // 32 bytes buffer of 32 bits registers, 8 registers present
         //  base                           next page address      buffer size
             (part->pages->ptr_start + RL_DEFAULT_METADATA_PAGE_SIZE - 32);
 
-        rl_assert(((uintptr_t)(part->dma_region) & 3) == 0
+        rl_assert(((uintptr_t)(part->dma_regs) & 3) == 0
                 && "DMA region must be 32bits");
     }
 

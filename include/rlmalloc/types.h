@@ -8,6 +8,7 @@
 #include <stdbool.h>
 
 #include "internal.h"
+#include "pl/dma.h"
 
 // stores thread id
 typedef uint32_t rl_thread_id_t;
@@ -56,9 +57,8 @@ typedef struct rl_attr_cache_line_alignment rl_partition_s {
     rl_page_t *                     last_page;
     uintptr_t                       ptr_start;
 
-    // doing this for future multithreading support
-    // 32bytes of 32bits 'registers'
-    volatile uint32_t *             dma_region;
+    // 8 32bits 'registers' at AXI-LITE protocol master base address
+    rl_dma_register_t               dma_registers;
 
     // padding
     char _padding[

@@ -1,6 +1,6 @@
 #include "rlmalloc/types.h"
 #include "rlmalloc/internal.h"
-#include "ps/thread.h"
+#include "pspec/thread.h"
 #include "rlmalloc.h"
 
 // just an empty page
@@ -26,13 +26,14 @@ const rl_partition_t _rl_part_empty = (rl_partition_t) {
     .pages                          = NULL,
     .ptr_start                      = 0,
 
-    .dma_region                     = NULL,
+    .dma_registers                  = NULL, // AXI-LITE master base address
 };
 
-rl_decl_thread rl_partition_t *_rl_local_part =
-    (rl_partition_t *)&_rl_part_empty;
+rl_decl_thread rl_partition_t *_rl_local_part = NULL;
+// global partition will not have a local partition
 static rl_partition_t _rl_global_part = _rl_part_empty;
 
+// from linker script(map-heap-tls.ld)
 extern char __heap_start;
 char *__rl_heap_start = &__heap_start;
 

@@ -21,6 +21,10 @@ bool rl_new_page(rl_partition_t *part, size_t size, size_t size_class);
 // page must be initialized before initializing the free-block-list
 bool rl_list_init(rl_page_t *page, size_t size_class);
 
+// initalize local partitions (not needed for single threaded applications)
+// initialized with default values, from rl_get_local_partition
+// bool rl_local_part_init(void);
+
 rl_partition_t *rl_get_local_partition(void);
 rl_partition_t *rl_get_global_partition(void);
 
