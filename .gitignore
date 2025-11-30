@@ -1,5 +1,12 @@
 .git
-build
+rlmalloc_hw.runs
+rlmalloc_hw.sim
+rlmalloc_hw.tmp
+rlmalloc_hw.cache
+*.jou
+*.log
+*.pb
+*.wdb
+*.xpr.user
 .DS_Store
-tests/build
-.cache
+Thumbs.db
