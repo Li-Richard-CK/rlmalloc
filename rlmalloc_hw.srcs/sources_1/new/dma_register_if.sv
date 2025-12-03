@@ -29,10 +29,6 @@ localparam SERR = 2'b11;
 // registers 32bits * 8
 logic [(RLMALLOC_REGISTER_WIDTH - 1):0] regs [0:(RLMALLOC_DMA_WIDTH - 1)];
 
-logic intr_alloc_done;
-logic intr_free_done;
-logic intr_error;
-
 // register map
 localparam REG_COMMAND     = 0; // allocate? free?
 localparam REG_STATUS      = 1; // status :)
