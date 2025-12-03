@@ -1,8 +1,10 @@
 `timescale 1 ns / 1 ps
 
-module rlmalloc_wrapper #(
-    parameter C_S_AXI_DATA_WIDTH = 32,
-    parameter C_S_AXI_ADDR_WIDTH = 5
+module rlmalloc_top #(
+    parameter integer C_S_AXI_DATA_WIDTH = 32,
+    parameter integer C_S_AXI_ADDR_WIDTH = 5,
+    
+    parameter integer C_NUM_OF_INTR = 1
 )(
     input  wire                                         S_AXI_ACLK,
     input  wire                                         S_AXI_ARESETN,
@@ -34,17 +36,12 @@ module rlmalloc_wrapper #(
     output wire [(C_S_AXI_DATA_WIDTH - 1):0]            S_AXI_RDATA,
     output wire [1:0]                                   S_AXI_RRESP,
     output wire                                         S_AXI_RVALID,
-    input  wire                                         S_AXI_RREADY,
-    
-    // interrupts
-    output wire                                         irq
+    input  wire                                         S_AXI_RREADY
 );
+
 rlmalloc_slave_lite_inter_v1_0_S_AXI_INTR #(
     .C_S_AXI_DATA_WIDTH(C_S_AXI_DATA_WIDTH),
-    .C_S_AXI_ADDR_WIDTH(C_S_AXI_ADDR_WIDTH),
-    .C_NUM_OF_INTR(3),
-    .C_INTR_SENSITIVITY(32'h0),
-    .C_INTR_ACTIVE_STATE(32'h1),
+    .C_S_AXI_ADDR_WIDTH(C_S_AXI_ADDR_WIDTH)
 ) axi_slave_inst (
     .S_AXI_ACLK(S_AXI_ACLK),
     .S_AXI_ARESETN(S_AXI_ARESETN),

@@ -4,7 +4,8 @@ module malloc(
     dma_register_if.pl reg_if
 );
 
-// ai generated for 
+/*
+// ai generated for testing axi lite bridge
 // Simple test: when PS writes a command, PL responds
 always @(*) begin
     // If PS writes ALLOC command, set status to ALLOCATING
@@ -23,6 +24,7 @@ always @(*) begin
         reg_if.regs[1] <= 2'b00; // STATUS_IDLE
     end
 end
+*/
 
 /*
 // registers for reference
@@ -50,8 +52,6 @@ localparam STATUS_ERR      = 2'b11;
 localparam ERRC_NONE       = 32'b0;
 */
 
-/*
-
 wire [1:0] reg_command = reg_if.regs[0][1:0];
 
 // allocation process
@@ -64,7 +64,5 @@ always @(*) begin
         end
     end
 end
-
-*/
 
 endmodule
