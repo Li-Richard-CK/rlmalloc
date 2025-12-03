@@ -11,9 +11,9 @@
     },
     "design_tree": {
       "processing_system7_0": "",
-      "rlmalloc_0": "",
       "axi_smc": "",
-      "rst_ps7_0_100M": ""
+      "rst_ps7_0_100M": "",
+      "rlmalloc_0": ""
     },
     "interface_ports": {
       "DDR": {
@@ -1883,14 +1883,6 @@
           }
         }
       },
-      "rlmalloc_0": {
-        "vlnv": "xilinx.com:user:rlmalloc:1.0",
-        "ip_revision": "1",
-        "xci_name": "rlmalloc_rlmalloc_0_0",
-        "xci_path": "ip\\rlmalloc_rlmalloc_0_0\\rlmalloc_rlmalloc_0_0.xci",
-        "inst_hier_path": "rlmalloc_0",
-        "has_run_ip_tcl": "true"
-      },
       "axi_smc": {
         "vlnv": "xilinx.com:ip:smartconnect:1.0",
         "ip_revision": "27",
@@ -2005,6 +1997,14 @@
         "xci_path": "ip\\rlmalloc_rst_ps7_0_100M_0\\rlmalloc_rst_ps7_0_100M_0.xci",
         "inst_hier_path": "rst_ps7_0_100M",
         "has_run_ip_tcl": "true"
+      },
+      "rlmalloc_0": {
+        "vlnv": "xilinx.com:user:rlmalloc:1.0",
+        "ip_revision": "1",
+        "xci_name": "rlmalloc_rlmalloc_0_1",
+        "xci_path": "ip\\rlmalloc_rlmalloc_0_1\\rlmalloc_rlmalloc_0_1.xci",
+        "inst_hier_path": "rlmalloc_0",
+        "has_run_ip_tcl": "true"
       }
     },
     "interface_nets": {
@@ -2045,8 +2045,8 @@
           "processing_system7_0/FCLK_CLK0",
           "processing_system7_0/M_AXI_GP0_ACLK",
           "axi_smc/aclk",
-          "rlmalloc_0/s00_axi_aclk",
           "rst_ps7_0_100M/slowest_sync_clk",
+          "rlmalloc_0/s00_axi_aclk",
           "rlmalloc_0/s_axi_intr_aclk"
         ]
       },
@@ -2059,8 +2059,8 @@
       "rst_ps7_0_100M_peripheral_aresetn": {
         "ports": [
           "rst_ps7_0_100M/peripheral_aresetn",
-          "rlmalloc_0/s00_axi_aresetn",
           "axi_smc/aresetn",
+          "rlmalloc_0/s00_axi_aresetn",
           "rlmalloc_0/s_axi_intr_aresetn"
         ]
       }
