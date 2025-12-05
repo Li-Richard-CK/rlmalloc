@@ -10,3 +10,5 @@ rlmalloc_hw.cache
 *.xpr.user
 .DS_Store
 Thumbs.db
+build
+
