@@ -44,6 +44,7 @@
     <Option Name="SimulatorGccVersionRiviera" Val="9.3.0"/>
     <Option Name="SimulatorGccVersionActiveHdl" Val="9.3.0"/>
     <Option Name="BoardPart" Val="tul.com.tw:pynq-z2:part0:1.0"/>
+    <Option Name="SourceMgmtMode" Val="DisplayOnly"/>
     <Option Name="ActiveSimSet" Val="sim_1"/>
     <Option Name="DefaultLib" Val="xil_defaultlib"/>
     <Option Name="ProjectType" Val="Default"/>
@@ -67,13 +68,13 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="2"/>
-    <Option Name="WTModelSimExportSim" Val="2"/>
-    <Option Name="WTQuestaExportSim" Val="2"/>
+    <Option Name="WTXSimExportSim" Val="4"/>
+    <Option Name="WTModelSimExportSim" Val="4"/>
+    <Option Name="WTQuestaExportSim" Val="4"/>
     <Option Name="WTIesExportSim" Val="0"/>
     <Option Name="WTVcsExportSim" Val="0"/>
-    <Option Name="WTRivieraExportSim" Val="2"/>
-    <Option Name="WTActivehdlExportSim" Val="2"/>
+    <Option Name="WTRivieraExportSim" Val="4"/>
+    <Option Name="WTActivehdlExportSim" Val="4"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -99,14 +100,7 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PSRCDIR/sources_1/new/malloc.sv">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
-      <File Path="$PSRCDIR/sources_1/new/rlmalloc_top.sv">
+      <File Path="$PSRCDIR/sources_1/ip/rlmalloc_0/rlmalloc_0.xci">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -115,7 +109,29 @@
       </File>
       <File Path="$PSRCDIR/sources_1/bd/rlmalloc/rlmalloc.bd">
         <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+        <CompFileExtendedInfo CompFileName="rlmalloc.bd" FileRelPathName="ip/rlmalloc_axi_smc_0/rlmalloc_axi_smc_0.xci">
+          <Proxy FileSetName="rlmalloc_axi_smc_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="rlmalloc.bd" FileRelPathName="ip/rlmalloc_processing_system7_0_0/rlmalloc_processing_system7_0_0.xci">
+          <Proxy FileSetName="rlmalloc_processing_system7_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="rlmalloc.bd" FileRelPathName="ip/rlmalloc_rst_ps7_0_100M_0/rlmalloc_rst_ps7_0_100M_0.xci">
+          <Proxy FileSetName="rlmalloc_rst_ps7_0_100M_0"/>
+        </CompFileExtendedInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/new/rlmalloc_top_sv.sv">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PSRCDIR/sources_1/new/rlmalloc_top.v">
+        <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
@@ -160,17 +176,21 @@
         <Option Name="TopAutoSet" Val="TRUE"/>
       </Config>
     </FileSet>
-    <FileSet Name="rlmalloc_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/rlmalloc_0" RelGenDir="$PGENDIR/rlmalloc_0">
-      <File Path="$PSRCDIR/sources_1/ip/rlmalloc_0/rlmalloc_0.xci">
-        <FileInfo>
-          <Attr Name="AutoDisabled" Val="1"/>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
+    <FileSet Name="rlmalloc_processing_system7_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/rlmalloc_processing_system7_0_0" RelGenDir="$PGENDIR/rlmalloc_processing_system7_0_0">
       <Config>
-        <Option Name="TopModule" Val="rlmalloc_0"/>
+        <Option Name="TopModule" Val="rlmalloc_processing_system7_0_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="rlmalloc_axi_smc_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/rlmalloc_axi_smc_0" RelGenDir="$PGENDIR/rlmalloc_axi_smc_0">
+      <Config>
+        <Option Name="TopModule" Val="rlmalloc_axi_smc_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="rlmalloc_rst_ps7_0_100M_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/rlmalloc_rst_ps7_0_100M_0" RelGenDir="$PGENDIR/rlmalloc_rst_ps7_0_100M_0">
+      <Config>
+        <Option Name="TopModule" Val="rlmalloc_rst_ps7_0_100M_0"/>
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
@@ -203,11 +223,29 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="rlmalloc_0_synth_1" Type="Ft3:Synth" SrcSet="rlmalloc_0" Part="xc7z020clg400-1" ConstrsSet="rlmalloc_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/rlmalloc_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/rlmalloc_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/rlmalloc_0_synth_1" ParallelReportGen="true">
+    <Run Id="rlmalloc_processing_system7_0_0_synth_1" Type="Ft3:Synth" SrcSet="rlmalloc_processing_system7_0_0" Part="xc7z020clg400-1" ConstrsSet="rlmalloc_processing_system7_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/rlmalloc_processing_system7_0_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/rlmalloc_processing_system7_0_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/rlmalloc_processing_system7_0_0_synth_1" ParallelReportGen="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2025">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2025"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2025"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="rlmalloc_axi_smc_0_synth_1" Type="Ft3:Synth" SrcSet="rlmalloc_axi_smc_0" Part="xc7z020clg400-1" ConstrsSet="rlmalloc_axi_smc_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/rlmalloc_axi_smc_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/rlmalloc_axi_smc_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/rlmalloc_axi_smc_0_synth_1" ParallelReportGen="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2025"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2025"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="rlmalloc_rst_ps7_0_100M_0_synth_1" Type="Ft3:Synth" SrcSet="rlmalloc_rst_ps7_0_100M_0" Part="xc7z020clg400-1" ConstrsSet="rlmalloc_rst_ps7_0_100M_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/rlmalloc_rst_ps7_0_100M_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/rlmalloc_rst_ps7_0_100M_0_synth_1" AutoRQSDir="$PSRCDIR/utils_1/imports/rlmalloc_rst_ps7_0_100M_0_synth_1" ParallelReportGen="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2025"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -232,11 +270,43 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="rlmalloc_0_impl_1" Type="Ft2:EntireDesign" Part="xc7z020clg400-1" ConstrsSet="rlmalloc_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="rlmalloc_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/rlmalloc_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/rlmalloc_0_impl_1" ParallelReportGen="true">
+    <Run Id="rlmalloc_processing_system7_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7z020clg400-1" ConstrsSet="rlmalloc_processing_system7_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="rlmalloc_processing_system7_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/rlmalloc_processing_system7_0_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/rlmalloc_processing_system7_0_0_impl_1" ParallelReportGen="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2025">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2025"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2025"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="rlmalloc_axi_smc_0_impl_1" Type="Ft2:EntireDesign" Part="xc7z020clg400-1" ConstrsSet="rlmalloc_axi_smc_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="rlmalloc_axi_smc_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/rlmalloc_axi_smc_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/rlmalloc_axi_smc_0_impl_1" ParallelReportGen="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2025"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2025"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="rlmalloc_rst_ps7_0_100M_0_impl_1" Type="Ft2:EntireDesign" Part="xc7z020clg400-1" ConstrsSet="rlmalloc_rst_ps7_0_100M_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="rlmalloc_rst_ps7_0_100M_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/rlmalloc_rst_ps7_0_100M_0_impl_1" AutoRQSDir="$PSRCDIR/utils_1/imports/rlmalloc_rst_ps7_0_100M_0_impl_1" ParallelReportGen="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2025"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>

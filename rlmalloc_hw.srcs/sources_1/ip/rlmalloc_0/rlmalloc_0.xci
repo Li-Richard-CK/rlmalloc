@@ -3,7 +3,7 @@
   "ip_inst": {
     "xci_name": "rlmalloc_0",
     "component_reference": "xilinx.com:user:rlmalloc:1.0",
-    "ip_revision": "1",
+    "ip_revision": "3",
     "gen_directory": "../../../../rlmalloc_hw.gen/sources_1/ip/rlmalloc_0",
     "parameters": {
       "component_parameters": {
@@ -48,7 +48,7 @@
       },
       "runtime_parameters": {
         "IPCONTEXT": [ { "value": "IP_Flow" } ],
-        "IPREVISION": [ { "value": "1" } ],
+        "IPREVISION": [ { "value": "3" } ],
         "MANAGED": [ { "value": "TRUE" } ],
         "OUTPUTDIR": [ { "value": "../../../../rlmalloc_hw.gen/sources_1/ip/rlmalloc_0" } ],
         "SELECTEDSIMMODEL": [ { "value": "" } ],

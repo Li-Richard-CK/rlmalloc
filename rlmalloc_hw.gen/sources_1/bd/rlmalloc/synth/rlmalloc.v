@@ -2,7 +2,7 @@
 //Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2025.1 (win64) Build 6140274 Thu May 22 00:12:29 MDT 2025
-//Date        : Sat Nov 29 19:48:38 2025
+//Date        : Thu Dec 11 20:14:31 2025
 //Host        : Richard running 64-bit major release  (build 9200)
 //Command     : generate_target rlmalloc.bd
 //Design      : rlmalloc
@@ -10,7 +10,7 @@
 //--------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CORE_GENERATION_INFO = "rlmalloc,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=rlmalloc,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=4,numReposBlks=4,numNonXlnxBlks=0,numHierBlks=0,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=0,numPkgbdBlks=0,bdsource=USER,da_axi4_cnt=2,da_ps7_cnt=1,synth_mode=Hierarchical}" *) (* HW_HANDOFF = "rlmalloc.hwdef" *) 
+(* CORE_GENERATION_INFO = "rlmalloc,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=rlmalloc,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=4,numReposBlks=4,numNonXlnxBlks=0,numHierBlks=0,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=0,numPkgbdBlks=0,bdsource=USER,da_axi4_cnt=4,da_ps7_cnt=1,synth_mode=Hierarchical}" *) (* HW_HANDOFF = "rlmalloc.hwdef" *) 
 module rlmalloc
    (DDR_addr,
     DDR_ba,
@@ -154,6 +154,7 @@ module rlmalloc
   wire processing_system7_0_M_AXI_GP0_WREADY;
   wire [3:0]processing_system7_0_M_AXI_GP0_WSTRB;
   wire processing_system7_0_M_AXI_GP0_WVALID;
+  wire rlmalloc_0_irq;
   wire [0:0]rst_ps7_0_100M_peripheral_aresetn;
 
   rlmalloc_axi_smc_0 axi_smc
@@ -255,6 +256,7 @@ module rlmalloc
         .DDR_WEB(DDR_we_n),
         .FCLK_CLK0(processing_system7_0_FCLK_CLK0),
         .FCLK_RESET0_N(processing_system7_0_FCLK_RESET0_N),
+        .IRQ_F2P(rlmalloc_0_irq),
         .MIO(FIXED_IO_mio),
         .M_AXI_GP0_ACLK(processing_system7_0_FCLK_CLK0),
         .M_AXI_GP0_ARADDR(processing_system7_0_M_AXI_GP0_ARADDR),
@@ -297,10 +299,10 @@ module rlmalloc
         .M_AXI_GP0_WVALID(processing_system7_0_M_AXI_GP0_WVALID),
         .PS_CLK(FIXED_IO_ps_clk),
         .PS_PORB(FIXED_IO_ps_porb),
-        .PS_SRSTB(FIXED_IO_ps_srstb),
-        .USB0_VBUS_PWRFAULT(1'b0));
-  rlmalloc_rlmalloc_0_0 rlmalloc_0
-       (.s00_axi_aclk(processing_system7_0_FCLK_CLK0),
+        .PS_SRSTB(FIXED_IO_ps_srstb));
+  rlmalloc_rlmalloc_0_1 rlmalloc_0
+       (.irq(rlmalloc_0_irq),
+        .s00_axi_aclk(processing_system7_0_FCLK_CLK0),
         .s00_axi_araddr(axi_smc_M00_AXI_ARADDR),
         .s00_axi_aresetn(rst_ps7_0_100M_peripheral_aresetn),
         .s00_axi_arprot(axi_smc_M00_AXI_ARPROT),
