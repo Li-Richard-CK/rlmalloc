@@ -28,6 +28,8 @@ void *rl_malloc(size_t size) {
 
     regs[RL_DMA_REGISTER_COMMAND]    = RL_DMA_COMMAND_ALLOC;
 
+    // polling (replaced by interrupts)
+    /*
     uint32_t timeout = 1000; // maximum 1000 attempts (1ms in 1Gz cpu)
     while ((regs[RL_DMA_REGISTER_STATUS]
                 != RL_DMA_STATUS_IDLE) && timeout--);
@@ -35,6 +37,9 @@ void *rl_malloc(size_t size) {
         rl_set_error("pl operation timeout");
         return NULL;
     }
+    */
+
+
 
     if (regs[RL_DMA_REGISTER_ERRC] != RL_DMA_ERROR_CODE_NONE) {
         rl_set_error(rl_dma_translate_error_code(regs[RL_DMA_REGISTER_ERRC]));
