@@ -1,2 +1,2 @@
 # rlmalloc
-Hardware accelerated multi-threaded memory allocator
+Hardware accelerated block based memory allocator
