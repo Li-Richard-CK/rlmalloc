@@ -49,8 +49,8 @@ module rlmalloc_top_sv #(
     input  wire                                         reg_command,
     output wire                                         reg_status,
     input  wire                                         reg_asize,
-    input  wire [(C_S_AXI_ADDR_WIDTH - 1):0]            reg_inaddr,
-    output wire [(C_S_AXI_ADDR_WIDTH - 1):0]            reg_outaddr,
+    input  wire [(C_S_AXI_ADDR_WIDTH - 1):0]            reg_indata,
+    output wire [(C_S_AXI_ADDR_WIDTH - 1):0]            reg_outdata,
     output wire                                         reg_errc,
     inout  wire [(C_S_AXI_DATA_WIDTH - 1):0]            reg_gp0,
     input  wire [(C_S_AXI_DATA_WIDTH - 1):0]            reg_gp1,
@@ -96,9 +96,11 @@ always @(*) begin
     end
 end
 
-assign reg_inaddr = waddr;
-assign reg_outaddr = raddr;
-
-
+// handle writing
+always @(posedge S_AXI_ACLK) begin
+    if (wskid) begin
+        
+    end
+end
 
 endmodule
