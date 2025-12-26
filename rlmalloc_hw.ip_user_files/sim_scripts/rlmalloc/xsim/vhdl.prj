@@ -1,0 +1,19 @@
+vhdl axi_lite_ipif_v3_0_4  \
+"../../../../rlmalloc_hw.gen/sources_1/bd/rlmalloc/ipshared/66ea/hdl/axi_lite_ipif_v3_0_vh_rfs.vhd" \
+
+vhdl axi_intc_v4_1_21  \
+"../../../../rlmalloc_hw.gen/sources_1/bd/rlmalloc/ipshared/9eb6/hdl/axi_intc_v4_1_vh_rfs.vhd" \
+
+vhdl xil_defaultlib  \
+"../../../../rlmalloc_hw.gen/sources_1/bd/rlmalloc/ip/rlmalloc_axi_intc_0_1/sim/rlmalloc_axi_intc_0_1.vhd" \
+
+vhdl proc_sys_reset_v5_0_17  \
+"../../../../rlmalloc_hw.gen/sources_1/bd/rlmalloc/ipshared/9438/hdl/proc_sys_reset_v5_0_vh_rfs.vhd" \
+
+vhdl xil_defaultlib  \
+"../../../../rlmalloc_hw.gen/sources_1/bd/rlmalloc/ip/rlmalloc_axi_smc_1/bd_0/ip/ip_1/sim/bd_aff6_psr_aclk_0.vhd" \
+"../../../../rlmalloc_hw.gen/sources_1/bd/rlmalloc/ip/rlmalloc_rst_ps7_0_100M_1/sim/rlmalloc_rst_ps7_0_100M_1.vhd" \
+"../../../../rlmalloc_hw.gen/sources_1/bd/rlmalloc/ip/rlmalloc_rlmalloc_top_0_1/src/rlmalloc_axi_intc_0_1/sim/rlmalloc_axi_intc_0_1.vhd" \
+
+# Do not sort compile order
+nosort

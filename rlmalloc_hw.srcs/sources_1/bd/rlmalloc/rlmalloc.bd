@@ -1,7 +1,7 @@
 {
   "design": {
     "design_info": {
-      "boundary_crc": "0xCC6CFA53F622E079",
+      "boundary_crc": "0xCC6CFA53B4580162",
       "device": "xc7z020clg400-1",
       "gen_directory": "../../../../rlmalloc_hw.gen/sources_1/bd/rlmalloc",
       "name": "rlmalloc",
@@ -2050,7 +2050,7 @@
       },
       "rlmalloc_top_0": {
         "vlnv": "xilinx.com:user:rlmalloc_top:1.0",
-        "ip_revision": "2",
+        "ip_revision": "3",
         "xci_name": "rlmalloc_rlmalloc_top_0_1",
         "xci_path": "ip\\rlmalloc_rlmalloc_top_0_1\\rlmalloc_rlmalloc_top_0_1.xci",
         "inst_hier_path": "rlmalloc_top_0",

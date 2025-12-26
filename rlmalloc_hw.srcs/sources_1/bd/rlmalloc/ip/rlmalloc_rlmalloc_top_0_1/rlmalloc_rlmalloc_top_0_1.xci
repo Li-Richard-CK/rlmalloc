@@ -4,7 +4,7 @@
     "xci_name": "rlmalloc_rlmalloc_top_0_1",
     "cell_name": "rlmalloc_top_0",
     "component_reference": "xilinx.com:user:rlmalloc_top:1.0",
-    "ip_revision": "2",
+    "ip_revision": "3",
     "gen_directory": "../../../../../../rlmalloc_hw.gen/sources_1/bd/rlmalloc/ip/rlmalloc_rlmalloc_top_0_1",
     "parameters": {
       "component_parameters": {
@@ -33,7 +33,7 @@
       },
       "runtime_parameters": {
         "IPCONTEXT": [ { "value": "IP_Integrator" } ],
-        "IPREVISION": [ { "value": "2" } ],
+        "IPREVISION": [ { "value": "3" } ],
         "MANAGED": [ { "value": "TRUE" } ],
         "OUTPUTDIR": [ { "value": "../../../../../../rlmalloc_hw.gen/sources_1/bd/rlmalloc/ip/rlmalloc_rlmalloc_top_0_1" } ],
         "SELECTEDSIMMODEL": [ { "value": "" } ],
