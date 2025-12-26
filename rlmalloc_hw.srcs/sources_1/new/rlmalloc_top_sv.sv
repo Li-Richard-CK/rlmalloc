@@ -37,70 +37,155 @@ module rlmalloc_top_sv #(
     output wire                                         S_AXI_RVALID,
     input  wire                                         S_AXI_RREADY,
     
-    // dma registers
-    //localparam REG_COMMAND     = 0; // allocate? free?
-    //localparam REG_STATUS      = 1; // status :)
-    //localparam REG_ASIZE       = 2; // allocation size  
-    //localparam REG_INADDR      = 3; // input address (ps -> pl)
-    //localparam REG_OUTADDR     = 4; // output address (pl -> ps)
-    //localparam REG_ERRC        = 5; // error code
-    //localparam REG_GP0         = 6; // general purpose register
-    //localparam REG_GP1         = 7; // general purpose register
-    input  wire                                         reg_command,
-    output wire                                         reg_status,
-    input  wire                                         reg_asize,
-    input  wire [(C_S_AXI_ADDR_WIDTH - 1):0]            reg_indata,
-    output wire [(C_S_AXI_ADDR_WIDTH - 1):0]            reg_outdata,
-    output wire                                         reg_errc,
-    inout  wire [(C_S_AXI_DATA_WIDTH - 1):0]            reg_gp0,
-    input  wire [(C_S_AXI_DATA_WIDTH - 1):0]            reg_gp1,
-    
-    // interrupt handling
-    input  wire [(C_INTR_N - 1):0]                      intr,
     output wire                                         irq
 );
 
-reg wskid, rskid; // 0: not in use 1: in use
-reg [(C_S_AXI_ADDR_WIDTH - 1):0] waddr, raddr;
+// internal registers
+// ps -> pl registers
+reg [(C_S_AXI_DATA_WIDTH - 1):0]    slv_reg_control;   // 0x00
+reg [(C_S_AXI_DATA_WIDTH - 1):0]    slv_reg_size;      // 0x04
+reg [(C_S_AXI_DATA_WIDTH - 1):0]    slv_reg_free_addr; // 0x08
 
-assign S_AXI_AWREADY = 1'b1;
-assign S_AXI_WREADY = 1'b1;
-assign S_AXI_ARREADY = 1'b1;
-assign S_AXI_BRESP = 2'b00; // OKAY
-assign S_AXI_RRESP = 2'b00;
+// interal axi
+reg                                 axi_awready;
+reg                                 axi_wready;
+reg [1:0]                           axi_bresp;
+reg                                 axi_bvalid;
+reg                                 axi_arready;
+reg [C_S_AXI_DATA_WIDTH-1:0]        axi_rdata;
+reg [1:0]                           axi_rresp;
+reg                                 axi_rvalid;
 
-always @(*) begin
-    if (!S_AXI_ARESETN) begin // handle resets
-        wskid <= 0; rskid <= 0;
-        waddr <= 0; raddr <= 0;
-    end else begin
-        // handle write requests with write skid buffer
-        if (S_AXI_AWVALID && !wskid) begin
-            wskid <= 1;
-            waddr <= S_AXI_AWADDR;
-        end
-        
-        // reset write skid buffer when pl fully recieves data
-        if (S_AXI_BREADY && S_AXI_BVALID)
-            wskid <= 0;
-        
-        // handle read requests with read skid buffer
-        if (S_AXI_ARVALID && !rskid) begin
-            rskid <= 1;
-            raddr <= S_AXI_ARADDR;
-        end
-        
-        // reset read skid buffer when pl fully reads data
-        if (S_AXI_RRESP && S_AXI_RVALID)
-            rskid <= 0;
-    end
-end
+// connects to malloc module
+wire                                core_start;
+wire                                core_op; // 0: alloc 1: free
+wire [(C_S_AXI_DATA_WIDTH - 1):0]   core_size_in;
+wire [(C_S_AXI_DATA_WIDTH - 1):0]   core_data_in;
 
-// handle writing
+wire                                core_done;
+wire                                core_busy;
+wire [(C_S_AXI_DATA_WIDTH - 1):0]   core_data_out;
+wire                                core_error;
+
+// axi write
+assign S_AXI_AWREADY = axi_awready;
+assign S_AXI_WREADY  = axi_wready;
+assign S_AXI_BRESP   = axi_bresp;
+assign S_AXI_BVALID  = axi_bvalid;
+
 always @(posedge S_AXI_ACLK) begin
-    if (wskid) begin
+    if (S_AXI_ARESETN == 1'b0) begin
+        axi_awready       <= 1'b0;
+        axi_wready        <= 1'b0;
+        axi_bvalid        <= 1'b0;
+        axi_bresp         <= 2'b0;
+        slv_reg_control   <= 0;
+        slv_reg_size      <= 0;
+        slv_reg_free_addr <= 0;
+    end else begin
+        // write address ready
+        if (~axi_awready && S_AXI_AWVALID && S_AXI_WVALID)
+            axi_awready <= 1'b1;
+        else
+            axi_awready <= 1'b0;
+
+        // wriite data ready
+        if (~axi_wready && S_AXI_WVALID && S_AXI_AWVALID)
+            axi_wready <= 1'b1;
+        else
+            axi_wready <= 1'b0;
+
+        // write data
+        if (axi_wready && S_AXI_WVALID && axi_awready && S_AXI_AWVALID) begin
+            // decode address (address -> index)
+            case (S_AXI_AWADDR[4:2]) 
+                3'h0: slv_reg_control   <= S_AXI_WDATA; // 0x00
+                3'h1: slv_reg_size      <= S_AXI_WDATA; // 0x04
+                3'h2: slv_reg_free_addr <= S_AXI_WDATA; // 0x08
+                default:
+                    ;
+            endcase
+        end
         
+        // clear control bit when done
+        if (core_done) begin
+            slv_reg_control[0] <= 1'b0; 
+        end
+
+        // write response
+        if (axi_awready && S_AXI_AWVALID && axi_wready && S_AXI_WVALID && ~axi_bvalid) begin
+            axi_bvalid <= 1'b1;
+            axi_bresp  <= 2'b0; // OKAY
+        end else if (S_AXI_BREADY && axi_bvalid) begin
+            axi_bvalid <= 1'b0;
+        end
     end
 end
+
+// axi read
+assign S_AXI_ARREADY = axi_arready;
+assign S_AXI_RDATA   = axi_rdata;
+assign S_AXI_RRESP   = axi_rresp;
+assign S_AXI_RVALID  = axi_rvalid;
+
+always @(posedge S_AXI_ACLK) begin
+    if (S_AXI_ARESETN == 1'b0) begin
+        axi_arready <= 1'b0;
+        axi_rvalid  <= 1'b0;
+        axi_rresp   <= 2'b0;
+        axi_rdata   <= 0;
+    end else begin
+        // read address
+        if (~axi_arready && S_AXI_ARVALID)
+            axi_arready <= 1'b1;
+        else
+            axi_arready <= 1'b0;
+
+        // read data + validity
+        if (axi_arready && S_AXI_ARVALID && ~axi_rvalid) begin
+            axi_rvalid <= 1'b1;
+            axi_rresp  <= 2'b0; // OKAY
+            
+            // read mux
+            case (S_AXI_ARADDR[4:2])
+                3'h0: axi_rdata <= slv_reg_control;               // 0x00
+                3'h1: axi_rdata <= slv_reg_size;                  // 0x04
+                3'h2: axi_rdata <= slv_reg_free_addr;             // 0x08
+                3'h3: axi_rdata <= {30'b0, core_busy, core_done}; // 0x0C status
+                3'h4: axi_rdata <= core_data_out;                 // 0x10 result
+                3'h5: axi_rdata <= {31'b0, core_error};           // 0x14 error
+                default: axi_rdata <= 0;
+            endcase
+        end else if (axi_rvalid && S_AXI_RREADY) begin
+            axi_rvalid <= 1'b0;
+        end
+    end
+end
+
+// malloc
+assign core_start    = slv_reg_control[0]; // 0 start
+assign core_op       = slv_reg_control[1]; // 1 option 0: alloc 1: free
+assign core_size_in  = slv_reg_size;       
+assign core_data_in  = slv_reg_free_addr;
+
+malloc u_malloc_core (
+    .clk        (S_AXI_ACLK),
+    .reset_n    (S_AXI_ARESETN),
+    
+    // input
+    .start      (core_start),
+    .op         (core_op),
+    .size_in    (core_size_in),
+    .data_in    (core_data_in),
+    
+    // output
+    .done       (core_done),
+    .busy       (core_busy),
+    .data_out   (core_data_out),
+    .error      (core_error)
+);
+
+// interrupt
+assign irq = core_done;
 
 endmodule

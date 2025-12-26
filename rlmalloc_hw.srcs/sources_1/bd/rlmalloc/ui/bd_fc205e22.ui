@@ -1,26 +1,32 @@
 {
    "ActiveEmotionalView":"Default View",
-   "Default View_ScaleFactor":"1.5",
-   "Default View_TopLeft":"-181,-218",
+   "Default View_ScaleFactor":"1.06066",
+   "Default View_TopLeft":"-781,-387",
    "ExpandedHierarchyInLayout":"",
    "guistr":"# # String gsaved with Nlview 7.8.0 2024-04-26 e1825d835c VDI=44 GEI=38 GUI=JA:21.0
 #  -string -flagsOSRD
-preplace port DDR -pg 1 -lvl 4 -x 1210 -y 70 -defaultsOSRD
-preplace port FIXED_IO -pg 1 -lvl 4 -x 1210 -y 100 -defaultsOSRD
-preplace inst processing_system7_0 -pg 1 -lvl 1 -x 410 -y 120 -defaultsOSRD
-preplace inst axi_smc -pg 1 -lvl 2 -x 800 -y 190 -defaultsOSRD
-preplace inst rst_ps7_0_100M -pg 1 -lvl 1 -x 410 -y 320 -defaultsOSRD
-preplace netloc processing_system7_0_FCLK_CLK0 1 0 2 220 220 610
-preplace netloc processing_system7_0_FCLK_RESET0_N 1 0 2 210 20 600
-preplace netloc rst_ps7_0_100M_peripheral_aresetn 1 1 1 620 210n
-preplace netloc processing_system7_0_DDR 1 1 3 620J 70 NJ 70 NJ
-preplace netloc processing_system7_0_FIXED_IO 1 1 3 NJ 100 NJ 100 NJ
-preplace netloc processing_system7_0_M_AXI_GP0 1 1 1 620 120n
-levelinfo -pg 1 0 410 800 1070 1210
-pagesize -pg 1 -db -bbox -sgen 0 -110 1320 690
+preplace port DDR -pg 1 -lvl 4 -x 980 -y 60 -defaultsOSRD
+preplace port FIXED_IO -pg 1 -lvl 4 -x 980 -y 90 -defaultsOSRD
+preplace inst processing_system7_0 -pg 1 -lvl 1 -x 220 -y 120 -defaultsOSRD
+preplace inst axi_intc_0 -pg 1 -lvl 3 -x 840 -y 200 -defaultsOSRD
+preplace inst axi_smc -pg 1 -lvl 2 -x 560 -y 180 -defaultsOSRD
+preplace inst rst_ps7_0_100M -pg 1 -lvl 1 -x 220 -y 340 -defaultsOSRD
+preplace inst rlmalloc_top_0 -pg 1 -lvl 3 -x 840 -y 370 -defaultsOSRD
+preplace netloc processing_system7_0_FCLK_CLK0 1 0 3 20 230 420 80 710
+preplace netloc processing_system7_0_FCLK_RESET0_N 1 0 2 30 240 410
+preplace netloc rst_ps7_0_100M_peripheral_aresetn 1 1 2 430 100 690
+preplace netloc axi_intc_0_irq 1 0 4 30 10 NJ 10 NJ 10 960
+preplace netloc rlmalloc_top_0_irq 1 2 2 720 290 960
+preplace netloc processing_system7_0_DDR 1 1 3 430J 60 NJ 60 NJ
+preplace netloc processing_system7_0_FIXED_IO 1 1 3 NJ 90 NJ 90 NJ
+preplace netloc processing_system7_0_M_AXI_GP0 1 1 1 410 130n
+preplace netloc axi_smc_M00_AXI 1 2 1 N 170
+preplace netloc axi_smc_M01_AXI 1 2 1 700 190n
+levelinfo -pg 1 0 220 560 840 980
+pagesize -pg 1 -db -bbox -sgen 0 0 1090 450
 "
 }
 {
    "da_axi4_cnt":"4",
-   "da_ps7_cnt":"1"
+   "da_ps7_cnt":"2"
 }

@@ -37,18 +37,6 @@ module rlmalloc_top #(
     output wire                                         S_AXI_RVALID,
     input  wire                                         S_AXI_RREADY,
     
-    // dma registers
-    input  wire                                         reg_command,
-    output wire                                         reg_status,
-    input  wire                                         reg_asize,
-    input  wire [(C_S_AXI_ADDR_WIDTH - 1):0]            reg_indata,
-    output wire [(C_S_AXI_ADDR_WIDTH - 1):0]            reg_outdata,
-    output wire                                         reg_errc,
-    inout  wire [(C_S_AXI_DATA_WIDTH - 1):0]            reg_gp0,
-    input  wire [(C_S_AXI_DATA_WIDTH - 1):0]            reg_gp1,
-    
-    // interrupt handling
-    input  wire [(C_INTR_N - 1):0]                      intr,
     output wire                                         irq
 );
 
@@ -80,16 +68,6 @@ rlmalloc_top_sv rlmalloc_core(
     .S_AXI_RVALID(S_AXI_RVALID),
     .S_AXI_RREADY(S_AXI_RREADY),
     
-    .reg_command(reg_command),
-    .reg_status(reg_status),
-    .reg_asize(reg_asize),
-    .reg_indata(reg_indata),
-    .reg_outdata(reg_outdata),
-    .reg_errc(reg_errc),
-    .reg_gp0(reg_gp0),
-    .reg_gp1(reg_gp1),
-    
-    .intr(intr),
     .irq(irq)
 );
 
