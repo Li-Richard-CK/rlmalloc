@@ -2,7 +2,7 @@
 //Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 //--------------------------------------------------------------------------------
 //Tool Version: Vivado v.2025.1 (win64) Build 6140274 Thu May 22 00:12:29 MDT 2025
-//Date        : Thu Dec 11 20:14:31 2025
+//Date        : Fri Dec 26 23:13:25 2025
 //Host        : Richard running 64-bit major release  (build 9200)
 //Command     : generate_target rlmalloc.bd
 //Design      : rlmalloc
@@ -10,7 +10,7 @@
 //--------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CORE_GENERATION_INFO = "rlmalloc,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=rlmalloc,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=4,numReposBlks=4,numNonXlnxBlks=0,numHierBlks=0,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=0,numPkgbdBlks=0,bdsource=USER,da_axi4_cnt=4,da_ps7_cnt=1,synth_mode=Hierarchical}" *) (* HW_HANDOFF = "rlmalloc.hwdef" *) 
+(* CORE_GENERATION_INFO = "rlmalloc,IP_Integrator,{x_ipVendor=xilinx.com,x_ipLibrary=BlockDiagram,x_ipName=rlmalloc,x_ipVersion=1.00.a,x_ipLanguage=VERILOG,numBlks=5,numReposBlks=5,numNonXlnxBlks=0,numHierBlks=0,maxHierDepth=0,numSysgenBlks=0,numHlsBlks=0,numHdlrefBlks=0,numPkgbdBlks=0,bdsource=USER,da_axi4_cnt=4,da_ps7_cnt=2,synth_mode=Hierarchical}" *) (* HW_HANDOFF = "rlmalloc.hwdef" *) 
 module rlmalloc
    (DDR_addr,
     DDR_ba,
@@ -76,12 +76,11 @@ module rlmalloc
   wire FIXED_IO_ps_clk;
   wire FIXED_IO_ps_porb;
   wire FIXED_IO_ps_srstb;
-  wire [4:0]axi_smc_M00_AXI_ARADDR;
-  wire [2:0]axi_smc_M00_AXI_ARPROT;
+  wire axi_intc_0_irq;
+  wire [8:0]axi_smc_M00_AXI_ARADDR;
   wire axi_smc_M00_AXI_ARREADY;
   wire axi_smc_M00_AXI_ARVALID;
-  wire [4:0]axi_smc_M00_AXI_AWADDR;
-  wire [2:0]axi_smc_M00_AXI_AWPROT;
+  wire [8:0]axi_smc_M00_AXI_AWADDR;
   wire axi_smc_M00_AXI_AWREADY;
   wire axi_smc_M00_AXI_AWVALID;
   wire axi_smc_M00_AXI_BREADY;
@@ -95,11 +94,11 @@ module rlmalloc
   wire axi_smc_M00_AXI_WREADY;
   wire [3:0]axi_smc_M00_AXI_WSTRB;
   wire axi_smc_M00_AXI_WVALID;
-  wire [4:0]axi_smc_M01_AXI_ARADDR;
+  wire [7:0]axi_smc_M01_AXI_ARADDR;
   wire [2:0]axi_smc_M01_AXI_ARPROT;
   wire axi_smc_M01_AXI_ARREADY;
   wire axi_smc_M01_AXI_ARVALID;
-  wire [4:0]axi_smc_M01_AXI_AWADDR;
+  wire [7:0]axi_smc_M01_AXI_AWADDR;
   wire [2:0]axi_smc_M01_AXI_AWPROT;
   wire axi_smc_M01_AXI_AWREADY;
   wire axi_smc_M01_AXI_AWVALID;
@@ -154,16 +153,36 @@ module rlmalloc
   wire processing_system7_0_M_AXI_GP0_WREADY;
   wire [3:0]processing_system7_0_M_AXI_GP0_WSTRB;
   wire processing_system7_0_M_AXI_GP0_WVALID;
-  wire rlmalloc_0_irq;
+  wire rlmalloc_top_0_irq;
   wire [0:0]rst_ps7_0_100M_peripheral_aresetn;
 
-  rlmalloc_axi_smc_0 axi_smc
+  rlmalloc_axi_intc_0_1 axi_intc_0
+       (.intr(rlmalloc_top_0_irq),
+        .irq(axi_intc_0_irq),
+        .s_axi_aclk(processing_system7_0_FCLK_CLK0),
+        .s_axi_araddr(axi_smc_M00_AXI_ARADDR),
+        .s_axi_aresetn(rst_ps7_0_100M_peripheral_aresetn),
+        .s_axi_arready(axi_smc_M00_AXI_ARREADY),
+        .s_axi_arvalid(axi_smc_M00_AXI_ARVALID),
+        .s_axi_awaddr(axi_smc_M00_AXI_AWADDR),
+        .s_axi_awready(axi_smc_M00_AXI_AWREADY),
+        .s_axi_awvalid(axi_smc_M00_AXI_AWVALID),
+        .s_axi_bready(axi_smc_M00_AXI_BREADY),
+        .s_axi_bresp(axi_smc_M00_AXI_BRESP),
+        .s_axi_bvalid(axi_smc_M00_AXI_BVALID),
+        .s_axi_rdata(axi_smc_M00_AXI_RDATA),
+        .s_axi_rready(axi_smc_M00_AXI_RREADY),
+        .s_axi_rresp(axi_smc_M00_AXI_RRESP),
+        .s_axi_rvalid(axi_smc_M00_AXI_RVALID),
+        .s_axi_wdata(axi_smc_M00_AXI_WDATA),
+        .s_axi_wready(axi_smc_M00_AXI_WREADY),
+        .s_axi_wstrb(axi_smc_M00_AXI_WSTRB),
+        .s_axi_wvalid(axi_smc_M00_AXI_WVALID));
+  rlmalloc_axi_smc_1 axi_smc
        (.M00_AXI_araddr(axi_smc_M00_AXI_ARADDR),
-        .M00_AXI_arprot(axi_smc_M00_AXI_ARPROT),
         .M00_AXI_arready(axi_smc_M00_AXI_ARREADY),
         .M00_AXI_arvalid(axi_smc_M00_AXI_ARVALID),
         .M00_AXI_awaddr(axi_smc_M00_AXI_AWADDR),
-        .M00_AXI_awprot(axi_smc_M00_AXI_AWPROT),
         .M00_AXI_awready(axi_smc_M00_AXI_AWREADY),
         .M00_AXI_awvalid(axi_smc_M00_AXI_AWVALID),
         .M00_AXI_bready(axi_smc_M00_AXI_BREADY),
@@ -236,7 +255,7 @@ module rlmalloc
         .S00_AXI_wvalid(processing_system7_0_M_AXI_GP0_WVALID),
         .aclk(processing_system7_0_FCLK_CLK0),
         .aresetn(rst_ps7_0_100M_peripheral_aresetn));
-  rlmalloc_processing_system7_0_0 processing_system7_0
+  rlmalloc_processing_system7_0_1 processing_system7_0
        (.DDR_Addr(DDR_addr),
         .DDR_BankAddr(DDR_ba),
         .DDR_CAS_n(DDR_cas_n),
@@ -256,7 +275,7 @@ module rlmalloc
         .DDR_WEB(DDR_we_n),
         .FCLK_CLK0(processing_system7_0_FCLK_CLK0),
         .FCLK_RESET0_N(processing_system7_0_FCLK_RESET0_N),
-        .IRQ_F2P(rlmalloc_0_irq),
+        .IRQ_F2P(axi_intc_0_irq),
         .MIO(FIXED_IO_mio),
         .M_AXI_GP0_ACLK(processing_system7_0_FCLK_CLK0),
         .M_AXI_GP0_ARADDR(processing_system7_0_M_AXI_GP0_ARADDR),
@@ -299,52 +318,32 @@ module rlmalloc
         .M_AXI_GP0_WVALID(processing_system7_0_M_AXI_GP0_WVALID),
         .PS_CLK(FIXED_IO_ps_clk),
         .PS_PORB(FIXED_IO_ps_porb),
-        .PS_SRSTB(FIXED_IO_ps_srstb));
-  rlmalloc_rlmalloc_0_1 rlmalloc_0
-       (.irq(rlmalloc_0_irq),
-        .s00_axi_aclk(processing_system7_0_FCLK_CLK0),
-        .s00_axi_araddr(axi_smc_M00_AXI_ARADDR),
-        .s00_axi_aresetn(rst_ps7_0_100M_peripheral_aresetn),
-        .s00_axi_arprot(axi_smc_M00_AXI_ARPROT),
-        .s00_axi_arready(axi_smc_M00_AXI_ARREADY),
-        .s00_axi_arvalid(axi_smc_M00_AXI_ARVALID),
-        .s00_axi_awaddr(axi_smc_M00_AXI_AWADDR),
-        .s00_axi_awprot(axi_smc_M00_AXI_AWPROT),
-        .s00_axi_awready(axi_smc_M00_AXI_AWREADY),
-        .s00_axi_awvalid(axi_smc_M00_AXI_AWVALID),
-        .s00_axi_bready(axi_smc_M00_AXI_BREADY),
-        .s00_axi_bresp(axi_smc_M00_AXI_BRESP),
-        .s00_axi_bvalid(axi_smc_M00_AXI_BVALID),
-        .s00_axi_rdata(axi_smc_M00_AXI_RDATA),
-        .s00_axi_rready(axi_smc_M00_AXI_RREADY),
-        .s00_axi_rresp(axi_smc_M00_AXI_RRESP),
-        .s00_axi_rvalid(axi_smc_M00_AXI_RVALID),
-        .s00_axi_wdata(axi_smc_M00_AXI_WDATA),
-        .s00_axi_wready(axi_smc_M00_AXI_WREADY),
-        .s00_axi_wstrb(axi_smc_M00_AXI_WSTRB),
-        .s00_axi_wvalid(axi_smc_M00_AXI_WVALID),
-        .s_axi_intr_aclk(processing_system7_0_FCLK_CLK0),
-        .s_axi_intr_araddr(axi_smc_M01_AXI_ARADDR),
-        .s_axi_intr_aresetn(rst_ps7_0_100M_peripheral_aresetn),
-        .s_axi_intr_arprot(axi_smc_M01_AXI_ARPROT),
-        .s_axi_intr_arready(axi_smc_M01_AXI_ARREADY),
-        .s_axi_intr_arvalid(axi_smc_M01_AXI_ARVALID),
-        .s_axi_intr_awaddr(axi_smc_M01_AXI_AWADDR),
-        .s_axi_intr_awprot(axi_smc_M01_AXI_AWPROT),
-        .s_axi_intr_awready(axi_smc_M01_AXI_AWREADY),
-        .s_axi_intr_awvalid(axi_smc_M01_AXI_AWVALID),
-        .s_axi_intr_bready(axi_smc_M01_AXI_BREADY),
-        .s_axi_intr_bresp(axi_smc_M01_AXI_BRESP),
-        .s_axi_intr_bvalid(axi_smc_M01_AXI_BVALID),
-        .s_axi_intr_rdata(axi_smc_M01_AXI_RDATA),
-        .s_axi_intr_rready(axi_smc_M01_AXI_RREADY),
-        .s_axi_intr_rresp(axi_smc_M01_AXI_RRESP),
-        .s_axi_intr_rvalid(axi_smc_M01_AXI_RVALID),
-        .s_axi_intr_wdata(axi_smc_M01_AXI_WDATA),
-        .s_axi_intr_wready(axi_smc_M01_AXI_WREADY),
-        .s_axi_intr_wstrb(axi_smc_M01_AXI_WSTRB),
-        .s_axi_intr_wvalid(axi_smc_M01_AXI_WVALID));
-  rlmalloc_rst_ps7_0_100M_0 rst_ps7_0_100M
+        .PS_SRSTB(FIXED_IO_ps_srstb),
+        .USB0_VBUS_PWRFAULT(1'b0));
+  rlmalloc_rlmalloc_top_0_1 rlmalloc_top_0
+       (.S_AXI_ACLK(processing_system7_0_FCLK_CLK0),
+        .S_AXI_ARADDR(axi_smc_M01_AXI_ARADDR),
+        .S_AXI_ARESETN(rst_ps7_0_100M_peripheral_aresetn),
+        .S_AXI_ARPROT(axi_smc_M01_AXI_ARPROT),
+        .S_AXI_ARREADY(axi_smc_M01_AXI_ARREADY),
+        .S_AXI_ARVALID(axi_smc_M01_AXI_ARVALID),
+        .S_AXI_AWADDR(axi_smc_M01_AXI_AWADDR),
+        .S_AXI_AWPROT(axi_smc_M01_AXI_AWPROT),
+        .S_AXI_AWREADY(axi_smc_M01_AXI_AWREADY),
+        .S_AXI_AWVALID(axi_smc_M01_AXI_AWVALID),
+        .S_AXI_BREADY(axi_smc_M01_AXI_BREADY),
+        .S_AXI_BRESP(axi_smc_M01_AXI_BRESP),
+        .S_AXI_BVALID(axi_smc_M01_AXI_BVALID),
+        .S_AXI_RDATA(axi_smc_M01_AXI_RDATA),
+        .S_AXI_RREADY(axi_smc_M01_AXI_RREADY),
+        .S_AXI_RRESP(axi_smc_M01_AXI_RRESP),
+        .S_AXI_RVALID(axi_smc_M01_AXI_RVALID),
+        .S_AXI_WDATA(axi_smc_M01_AXI_WDATA),
+        .S_AXI_WREADY(axi_smc_M01_AXI_WREADY),
+        .S_AXI_WSTRB(axi_smc_M01_AXI_WSTRB),
+        .S_AXI_WVALID(axi_smc_M01_AXI_WVALID),
+        .irq(rlmalloc_top_0_irq));
+  rlmalloc_rst_ps7_0_100M_1 rst_ps7_0_100M
        (.aux_reset_in(1'b1),
         .dcm_locked(1'b1),
         .ext_reset_in(processing_system7_0_FCLK_RESET0_N),
